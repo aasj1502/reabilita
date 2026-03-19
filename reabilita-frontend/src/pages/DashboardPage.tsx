@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
@@ -9,6 +9,8 @@ import {
 	Box,
 	Button,
 	CircularProgress,
+	Dialog,
+	DialogContent,
 	LinearProgress,
 	Stack,
 	Table,
@@ -79,6 +81,15 @@ interface MetricCardConfig {
 export const DashboardPage = () => {
 	const { data, isLoading, isError, refetch } = usePainelClinico();
 	const painel = data ?? fallbackPainelClinico;
+	const [isSredPopupOpen, setIsSredPopupOpen] = useState(false);
+
+	useEffect(() => {
+		const shouldShowPopup = sessionStorage.getItem('show_sred_popup') === '1';
+		if (shouldShowPopup) {
+			setIsSredPopupOpen(true);
+			sessionStorage.removeItem('show_sred_popup');
+		}
+	}, []);
 
 	const maiorVolumeMensal = useMemo(() => {
 		return Math.max(1, ...painel.atendimentos_ultimos_6_meses.map((item) => item.total));
@@ -133,6 +144,22 @@ export const DashboardPage = () => {
 
 	return (
 		<Stack spacing={2}>
+			<Dialog open={isSredPopupOpen} onClose={() => setIsSredPopupOpen(false)} maxWidth="md" fullWidth>
+				<DialogContent sx={{ p: 0 }}>
+					<Box
+						component="img"
+						src="/pop_pup_srad.png"
+						alt="Protocolo S-RED"
+						sx={{ width: '100%', height: 'auto', display: 'block' }}
+					/>
+					<Stack direction="row" justifyContent="flex-end" sx={{ p: 2 }}>
+						<Button variant="contained" onClick={() => setIsSredPopupOpen(false)} sx={{ minHeight: 44, minWidth: 44 }}>
+							Fechar
+						</Button>
+					</Stack>
+				</DialogContent>
+			</Dialog>
+
 			<Typography variant="h4" fontWeight={700} sx={{ fontSize: { xs: '1.75rem', sm: '2.125rem' } }}>
 				Painel Clínico
 			</Typography>

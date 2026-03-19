@@ -52,7 +52,16 @@ export const ClinicalLayout = () => {
 						flexDirection: 'column',
 					}}
 				>
-					<Stack direction="row" alignItems="center" spacing={1.5} px={2} py={2}>
+					<Stack
+						direction="row"
+						alignItems="center"
+						spacing={1.5}
+						px={2}
+						py={2}
+						component={RouterLink}
+						to="/dashboard"
+						sx={{ textDecoration: 'none', color: 'inherit', width: 'fit-content' }}
+					>
 						<Box
 							component="img"
 							src="/logo-reabilita-aman.png"

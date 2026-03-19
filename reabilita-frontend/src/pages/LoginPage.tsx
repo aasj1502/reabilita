@@ -39,6 +39,7 @@ export const LoginPage = () => {
 		event.preventDefault();
 		const success = await login({ username, password });
 		if (success) {
+			sessionStorage.setItem('show_sred_popup', '1');
 			navigate('/dashboard', { replace: true });
 		}
 	};
