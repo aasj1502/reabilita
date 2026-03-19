@@ -309,7 +309,11 @@ export const NovoAtendimentoPage = () => {
 		);
 	}, [formData.tipo_lesao, formData.segmento_corporal, referencias]);
 
-	const classificacaoAtividadeOptions = referencias?.classificacao_atividade_options ?? ['Não informado'];
+	const classificacaoAtividadeOptions = referencias?.classificacao_atividade_options ?? [
+		'Não informado',
+		'Evitável',
+		'Relacionado à Atividade',
+	];
 	const tipoAtividadeOptions = referencias?.tipo_atividade_options ?? ['Não informado'];
 	const tfmTafOptions = referencias?.tfm_taf_options ?? ['Não informado'];
 	const modalidadeOptions = referencias?.modalidade_esportiva_options ?? ['Não informado'];
@@ -346,6 +350,7 @@ export const NovoAtendimentoPage = () => {
 		formData.tipo_lesao === 'Óssea' && formData.origem_lesao === 'Por Estresse';
 	const gatilhoSredPorCid10 = formData.codigo_cid10.trim().toUpperCase().startsWith('M84.3');
 	const exigeDecisaoSred = gatilhoSredPorLesaoOrigem || gatilhoSredPorCid10;
+	const tipoAtividadeEhTfmTaf = formData.tipo_atividade.trim().toUpperCase() === 'TFM/TAF';
 
 	useEffect(() => {
 		if (!exigeDecisaoSred && formData.decisao_sred) {
@@ -795,9 +800,17 @@ export const NovoAtendimentoPage = () => {
 								select
 								label="Tipo de Atividade"
 								value={formData.tipo_atividade}
-								onChange={(event) =>
-									setFormData((current) => ({ ...current, tipo_atividade: event.target.value }))
-								}
+								onChange={(event) => {
+									const tipoAtividade = event.target.value;
+									setFormData((current) => ({
+										...current,
+										tipo_atividade: tipoAtividade,
+										tfm_taf:
+											tipoAtividade.trim().toUpperCase() === 'TFM/TAF'
+												? current.tfm_taf || 'Não informado'
+												: 'Não informado',
+									}));
+								}}
 								fullWidth
 								sx={{ '& .MuiInputBase-root': { minHeight: 44 } }}
 							>
@@ -814,6 +827,12 @@ export const NovoAtendimentoPage = () => {
 								value={formData.tfm_taf}
 								onChange={(event) =>
 									setFormData((current) => ({ ...current, tfm_taf: event.target.value }))
+								}
+								disabled={!tipoAtividadeEhTfmTaf}
+								helperText={
+									!tipoAtividadeEhTfmTaf
+										? 'Disponível quando Tipo de Atividade for TFM/TAF. Em outros casos permanece Não informado.'
+										: undefined
 								}
 								fullWidth
 								sx={{ '& .MuiInputBase-root': { minHeight: 44 } }}

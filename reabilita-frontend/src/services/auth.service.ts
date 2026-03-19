@@ -1,10 +1,23 @@
 import { apiClient } from './apiClient';
-import type { AuthSession, LoginPayload } from '../types/auth';
+import type {
+	AuthSession,
+	ChangePasswordPayload,
+	CreateSystemUserPayload,
+	LoginPayload,
+	PasswordResetRequestPayload,
+	SystemUserDetail,
+	SystemUserResponse,
+	UpdateUserPayload,
+} from '../types/auth';
 
 const RESOURCE_CSRF = '/auth/csrf/';
 const RESOURCE_LOGIN = '/auth/login/';
 const RESOURCE_ME = '/auth/me/';
 const RESOURCE_LOGOUT = '/auth/logout/';
+const RESOURCE_USERS = '/auth/usuarios/';
+const RESOURCE_USERS_NEW = '/auth/usuarios/novo/';
+const RESOURCE_CHANGE_PASSWORD = '/auth/mudar-senha/';
+const RESOURCE_PASSWORD_RESET = '/auth/recuperar-senha/';
 
 export const ensureCsrfToken = async (): Promise<void> => {
 	await apiClient.get(RESOURCE_CSRF);
@@ -22,4 +35,44 @@ export const meWithSession = async (): Promise<AuthSession> => {
 
 export const logoutWithSession = async (): Promise<void> => {
 	await apiClient.post(RESOURCE_LOGOUT);
+};
+
+export const createSystemUser = async (
+	payload: CreateSystemUserPayload,
+): Promise<SystemUserResponse> => {
+	const { data } = await apiClient.post<SystemUserResponse>(RESOURCE_USERS_NEW, payload);
+	return data;
+};
+
+export const listSystemUsers = async (): Promise<SystemUserDetail[]> => {
+	const { data } = await apiClient.get<SystemUserDetail[]>(RESOURCE_USERS);
+	return data;
+};
+
+export const getSystemUserDetail = async (userId: number): Promise<SystemUserDetail> => {
+	const { data } = await apiClient.get<SystemUserDetail>(`${RESOURCE_USERS}${userId}/`);
+	return data;
+};
+
+export const updateSystemUser = async (
+	userId: number,
+	payload: UpdateUserPayload,
+): Promise<SystemUserDetail> => {
+	const { data } = await apiClient.patch<SystemUserDetail>(
+		`${RESOURCE_USERS}${userId}/`,
+		payload,
+	);
+	return data;
+};
+
+export const changePassword = async (payload: ChangePasswordPayload): Promise<{ detail: string }> => {
+	const { data } = await apiClient.post<{ detail: string }>(RESOURCE_CHANGE_PASSWORD, payload);
+	return data;
+};
+
+export const requestPasswordReset = async (
+	payload: PasswordResetRequestPayload,
+): Promise<{ detail: string }> => {
+	const { data } = await apiClient.post<{ detail: string }>(RESOURCE_PASSWORD_RESET, payload);
+	return data;
 };

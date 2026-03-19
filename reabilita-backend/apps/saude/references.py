@@ -21,7 +21,11 @@ DISPOSICAO_OPTIONS = ["Dispensado", "Regime Limitado", "Alta", "Risco Cirúrgico
 EXAMES_COMPLEMENTARES_OPTIONS = ["RX", "USG", "TC", "RM", "DEXA", "Sangue"]
 DECISAO_SRED_OPTIONS = ["S-RED Positivo", "S-RED Negativo"]
 
-DEFAULT_CLASSIFICACAO_ATIVIDADE_OPTIONS = ["Não informado"]
+DEFAULT_CLASSIFICACAO_ATIVIDADE_OPTIONS = [
+    "Não informado",
+    "Evitável",
+    "Relacionado à Atividade",
+]
 DEFAULT_TIPO_ATIVIDADE_OPTIONS = ["Não informado"]
 DEFAULT_TFM_TAF_OPTIONS = ["Não informado"]
 DEFAULT_MODALIDADE_ESPORTIVA_OPTIONS = ["Não informado"]
@@ -307,11 +311,6 @@ def build_atividade_contexto_options(rows: Iterable[SacMapeamento] | None = None
 
     from_xlsx = _load_atividade_options_from_xlsx()
 
-    classificacao_raw = _extract_options_from_raw_data(
-        sac_rows,
-        ("classificacao_atividade", "classificacao da atividade", "atividade_classificacao"),
-        [],
-    )
     tipo_atividade_raw = _extract_options_from_raw_data(
         sac_rows,
         ("tipo_atividade", "atividade_tipo", "atividade"),
@@ -333,42 +332,52 @@ def build_atividade_contexto_options(rows: Iterable[SacMapeamento] | None = None
         [],
     )
 
-    classificacao_options = _unique_preserve_order(
-        [
-            *from_xlsx.get("classificacao_atividade_options", []),
-            *classificacao_raw,
-        ]
-    )
-    if not classificacao_options:
-        classificacao_options = list(FALLBACK_ATIVIDADE_OPTIONS)
+    classificacao_options = list(DEFAULT_CLASSIFICACAO_ATIVIDADE_OPTIONS)
 
     tipo_atividade_options = _unique_preserve_order(
         [
+            *DEFAULT_TIPO_ATIVIDADE_OPTIONS,
             *from_xlsx.get("tipo_atividade_options", []),
             *tipo_atividade_raw,
-            *classificacao_options,
         ]
     )
-    if not tipo_atividade_options:
-        tipo_atividade_options = list(FALLBACK_ATIVIDADE_OPTIONS)
+    if tipo_atividade_options == list(DEFAULT_TIPO_ATIVIDADE_OPTIONS):
+        tipo_atividade_options = _unique_preserve_order(
+            [
+                *DEFAULT_TIPO_ATIVIDADE_OPTIONS,
+                *FALLBACK_ATIVIDADE_OPTIONS,
+            ]
+        )
 
     tfm_taf_options = _unique_preserve_order(
         [
+            *DEFAULT_TFM_TAF_OPTIONS,
             *from_xlsx.get("tfm_taf_options", []),
             *tfm_taf_raw,
         ]
     )
-    if not tfm_taf_options:
-        tfm_taf_options = list(FALLBACK_TFM_TAF_OPTIONS)
+    if tfm_taf_options == list(DEFAULT_TFM_TAF_OPTIONS):
+        tfm_taf_options = _unique_preserve_order(
+            [
+                *DEFAULT_TFM_TAF_OPTIONS,
+                *FALLBACK_TFM_TAF_OPTIONS,
+            ]
+        )
 
     modalidade_options = _unique_preserve_order(
         [
+            *DEFAULT_MODALIDADE_ESPORTIVA_OPTIONS,
             *from_xlsx.get("modalidade_esportiva_options", []),
             *modalidade_raw,
         ]
     )
-    if not modalidade_options:
-        modalidade_options = list(FALLBACK_MODALIDADE_ESPORTIVA_OPTIONS)
+    if modalidade_options == list(DEFAULT_MODALIDADE_ESPORTIVA_OPTIONS):
+        modalidade_options = _unique_preserve_order(
+            [
+                *DEFAULT_MODALIDADE_ESPORTIVA_OPTIONS,
+                *FALLBACK_MODALIDADE_ESPORTIVA_OPTIONS,
+            ]
+        )
 
     conduta_options = _unique_preserve_order(
         [

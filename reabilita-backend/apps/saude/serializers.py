@@ -161,6 +161,20 @@ class AtendimentoSerializer(serializers.ModelSerializer):
         else:
             attrs["decisao_sred"] = decisao_sred
 
+        tipo_atividade = str(
+            attrs.get("tipo_atividade")
+            or (getattr(self.instance, "tipo_atividade", "") if self.instance is not None else "")
+        ).strip()
+        tfm_taf = str(
+            attrs.get("tfm_taf")
+            or (getattr(self.instance, "tfm_taf", "") if self.instance is not None else "")
+        ).strip()
+
+        if tipo_atividade.upper() == "TFM/TAF":
+            attrs["tfm_taf"] = tfm_taf or "Não informado"
+        else:
+            attrs["tfm_taf"] = "Não informado"
+
         if "encaminhamentos_multidisciplinares" in attrs:
             attrs["encaminhamentos_multidisciplinares"] = self._sanitize_string_list(
                 attrs.get("encaminhamentos_multidisciplinares")
