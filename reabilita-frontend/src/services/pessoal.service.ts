@@ -1,5 +1,6 @@
 import { apiClient } from './apiClient';
 import type {
+	BulkCsvResult,
 	CreateMilitarPayload,
 	Militar,
 	ProfissionalSaude,
@@ -28,4 +29,15 @@ export const createMilitar = async (payload: CreateMilitarPayload): Promise<Mili
 export const listProfissionaisSaude = async (): Promise<ProfissionalSaude[]> => {
 	const { data } = await apiClient.get<ProfissionalSaude[] | { results: ProfissionalSaude[] }>(RESOURCE_PROFISSIONAIS);
 	return toArrayResult(data);
+};
+
+export const bulkCreateMilitaresCsv = async (file: File): Promise<BulkCsvResult> => {
+	const formData = new FormData();
+	formData.append('arquivo', file);
+	const { data } = await apiClient.post<BulkCsvResult>(
+		`${RESOURCE_MILITARES}bulk-csv/`,
+		formData,
+		{ headers: { 'Content-Type': 'multipart/form-data' } },
+	);
+	return data;
 };

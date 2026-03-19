@@ -32,3 +32,16 @@ export interface ProfissionalSaude {
 	registro_profissional: string;
 	ativo: boolean;
 }
+
+export interface BulkCsvErro {
+	linha: number;
+	erro: string | Record<string, string[]>;
+}
+
+export interface BulkCsvResult {
+	total_enviados: number;
+	total_criados: number;
+	total_erros: number;
+	criados: Militar[];
+	erros: BulkCsvErro[];
+}

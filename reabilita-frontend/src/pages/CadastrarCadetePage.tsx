@@ -1,10 +1,12 @@
-import { useState, type FormEvent } from 'react';
+import { useRef, useState, type ChangeEvent, type FormEvent } from 'react';
 
 import {
 	Alert,
 	Button,
 	Checkbox,
+	Divider,
 	FormControlLabel,
+	LinearProgress,
 	Stack,
 	TextField,
 	Typography,
@@ -13,7 +15,8 @@ import axios from 'axios';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 import { SectionCard, useNotify } from '../design-system';
-import { useCreateMilitar } from '../hooks/usePessoal';
+import { useBulkCreateMilitaresCsv, useCreateMilitar } from '../hooks/usePessoal';
+import type { BulkCsvResult } from '../types/pessoal';
 import type { CreateMilitarPayload } from '../types/pessoal';
 
 interface FormState {
@@ -53,12 +56,26 @@ const getErrorMessage = (error: unknown): string => {
 	return 'Não foi possível cadastrar o cadete.';
 };
 
+const formatBulkErro = (erro: { linha: number; erro: string | Record<string, string[]> }): string => {
+	if (typeof erro.erro === 'string') return `Linha ${erro.linha}: ${erro.erro}`;
+	const msgs = Object.entries(erro.erro)
+		.map(([field, messages]) => `${field}: ${Array.isArray(messages) ? messages.join(', ') : messages}`)
+		.join('; ');
+	return `Linha ${erro.linha}: ${msgs}`;
+};
+
 export const CadastrarCadetePage = () => {
 	const navigate = useNavigate();
 	const notify = useNotify();
 	const createMilitarMutation = useCreateMilitar();
+	const bulkCsvMutation = useBulkCreateMilitaresCsv();
 	const [formData, setFormData] = useState<FormState>(initialFormState);
 	const [submitError, setSubmitError] = useState<string | null>(null);
+
+	const fileInputRef = useRef<HTMLInputElement>(null);
+	const [selectedFile, setSelectedFile] = useState<File | null>(null);
+	const [bulkResult, setBulkResult] = useState<BulkCsvResult | null>(null);
+	const [bulkError, setBulkError] = useState<string | null>(null);
 
 	const handleChange = (field: keyof FormState, value: string | boolean) => {
 		setFormData((current) => ({
@@ -92,6 +109,39 @@ export const CadastrarCadetePage = () => {
 			const message = getErrorMessage(error);
 			setSubmitError(message);
 			notify(message, 'error');
+		}
+	};
+
+	const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+		const file = event.target.files?.[0] ?? null;
+		setSelectedFile(file);
+		setBulkResult(null);
+		setBulkError(null);
+	};
+
+	const handleBulkUpload = async () => {
+		if (!selectedFile) return;
+		setBulkResult(null);
+		setBulkError(null);
+
+		try {
+			const result = await bulkCsvMutation.mutateAsync(selectedFile);
+			setBulkResult(result);
+			if (result.total_criados > 0) {
+				notify(`${result.total_criados} cadete(s) cadastrado(s) com sucesso.`, 'success');
+			}
+			if (result.total_erros > 0) {
+				notify(`${result.total_erros} linha(s) com erro.`, 'warning');
+			}
+		} catch (error) {
+			const message = getErrorMessage(error);
+			setBulkError(message);
+			notify(message, 'error');
+		} finally {
+			setSelectedFile(null);
+			if (fileInputRef.current) {
+				fileInputRef.current.value = '';
+			}
 		}
 	};
 
@@ -216,6 +266,69 @@ export const CadastrarCadetePage = () => {
 							Voltar ao Dashboard
 						</Button>
 					</Stack>
+				</Stack>
+			</SectionCard>
+
+			<Divider />
+
+			<SectionCard
+				title="Carga em Lote (CSV)"
+				subtitle="Envie um arquivo .csv com os cadetes para cadastro em massa. Colunas obrigatórias: nr_militar, nome_completo. Opcionais: sexo, turma, posto_graduacao, arma_quadro_servico, curso, companhia, pelotao, is_instrutor."
+			>
+				<Stack spacing={1.5}>
+					<Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} alignItems="center">
+						<Button
+							variant="outlined"
+							component="label"
+							sx={{ minHeight: 44, minWidth: 44 }}
+						>
+							Selecionar arquivo CSV
+							<input
+								ref={fileInputRef}
+								type="file"
+								accept=".csv"
+								hidden
+								onChange={handleFileChange}
+							/>
+						</Button>
+						{selectedFile ? (
+							<Typography variant="body2" color="text.secondary">
+								{selectedFile.name} ({(selectedFile.size / 1024).toFixed(1)} KB)
+							</Typography>
+						) : null}
+					</Stack>
+
+					<Button
+						variant="contained"
+						onClick={handleBulkUpload}
+						disabled={!selectedFile || bulkCsvMutation.isPending}
+						sx={{ minHeight: 44, minWidth: 44, alignSelf: 'flex-start' }}
+					>
+						{bulkCsvMutation.isPending ? 'Enviando...' : 'Enviar CSV'}
+					</Button>
+
+					{bulkCsvMutation.isPending ? <LinearProgress /> : null}
+
+					{bulkError ? <Alert severity="error">{bulkError}</Alert> : null}
+
+					{bulkResult ? (
+						<Stack spacing={1}>
+							<Alert severity={bulkResult.total_erros === 0 ? 'success' : 'warning'}>
+								{bulkResult.total_criados} cadastrado(s) de {bulkResult.total_enviados} linha(s).
+								{bulkResult.total_erros > 0 ? ` ${bulkResult.total_erros} erro(s).` : ''}
+							</Alert>
+							{bulkResult.erros.length > 0 ? (
+								<Alert severity="error" sx={{ maxHeight: 200, overflow: 'auto' }}>
+									<Typography variant="subtitle2" gutterBottom>Erros por linha:</Typography>
+									{bulkResult.erros.map((e, i) => (
+										<Typography key={i} variant="body2">
+											{formatBulkErro(e)}
+										</Typography>
+									))}
+								</Alert>
+							) : null}
+						</Stack>
+					) : null}
 				</Stack>
 			</SectionCard>
 		</Stack>
