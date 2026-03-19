@@ -80,6 +80,36 @@ docker push aasj1502/reabilita-frontend:latest
 4. Em **Environment variables**, adicione as variáveis de `.env.example` (adaptadas para o ambiente).
 5. Deploy da stack.
 
+### 5.3 Bloco pronto de variáveis (copiar e colar)
+
+Use este bloco como base em **Environment variables** da Stack no Portainer:
+
+```env
+FRONTEND_PORT=5173
+BACKEND_PORT=8000
+POSTGRES_PORT=5432
+
+DJANGO_SETTINGS_MODULE=reabilita_backend.settings.dev
+DJANGO_SECRET_KEY=troque-esta-chave
+DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1,SEU_DOMINIO_OU_IP
+RUN_SEED_REFERENCIAS=false
+DB_WAIT_MAX_ATTEMPTS=30
+DB_WAIT_INTERVAL_SECONDS=2
+
+POSTGRES_DB=reabilita
+POSTGRES_USER=reabilita
+POSTGRES_PASSWORD=troque-esta-senha
+
+BACKEND_IMAGE=aasj1502/reabilita-backend:latest
+FRONTEND_IMAGE=aasj1502/reabilita-frontend:latest
+```
+
+Observações do bloco:
+
+- Se usar domínio público, inclua o domínio em `DJANGO_ALLOWED_HOSTS`.
+- Para primeira carga clínica automática, altere `RUN_SEED_REFERENCIAS=true`.
+- Se mapear portas diferentes no host, ajuste `FRONTEND_PORT` e `BACKEND_PORT`.
+
 ## 6) Comportamento de inicialização
 
 O backend usa `entrypoint.sh` para:
