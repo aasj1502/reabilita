@@ -28,9 +28,33 @@ No diretório raiz do projeto:
    - Linux/macOS: `cp .env.example .env`
    - PowerShell: `Copy-Item .env.example .env`
 2. Ajuste valores mínimos:
-   - `DJANGO_SECRET_KEY`
+   - `DJANGO_SECRET_KEY` (veja seção abaixo)
    - `POSTGRES_PASSWORD`
    - `DJANGO_ALLOWED_HOSTS` (domínio/IP do ambiente de teste)
+
+### Como gerar a DJANGO_SECRET_KEY
+
+A `DJANGO_SECRET_KEY` deve ser uma string longa, aleatória e secreta. Use um dos métodos abaixo para gerar:
+
+**Python (recomendado):**
+
+```bash
+python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+```
+
+**Python (sem Django instalado):**
+
+```bash
+python -c "import secrets; print(secrets.token_urlsafe(50))"
+```
+
+**PowerShell:**
+
+```powershell
+-join ((65..90)+(97..122)+(48..57)+(33,35,36,37,38,42,43,45) | Get-Random -Count 50 | ForEach-Object {[char]$_})
+```
+
+Copie a saída e cole como valor de `DJANGO_SECRET_KEY` no `.env` (local) ou nas **Environment variables** da Stack no Portainer. Nunca reutilize a mesma chave entre ambientes.
 
 ## 4) Subir localmente com Docker Compose
 
@@ -92,6 +116,9 @@ POSTGRES_PORT=5432
 DJANGO_SETTINGS_MODULE=reabilita_backend.settings.dev
 DJANGO_SECRET_KEY=troque-esta-chave
 DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1,SEU_DOMINIO_OU_IP
+DJANGO_SUPERUSER_USERNAME=admin
+DJANGO_SUPERUSER_PASSWORD=admin
+DJANGO_SUPERUSER_EMAIL=admin@saude.com
 RUN_SEED_REFERENCIAS=false
 DB_WAIT_MAX_ATTEMPTS=30
 DB_WAIT_INTERVAL_SECONDS=2
