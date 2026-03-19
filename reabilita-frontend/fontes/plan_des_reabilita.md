@@ -42,7 +42,7 @@ O banco de dados será construído a partir das referências documentais e arqui
 
 * **Regra de Negócio:** O sistema impede o salvamento de atendimentos se o campo "Médico" não for informado, emitindo o alerta: **"Não esqueça de informar o Médico\!\!\!"** 11\.  
 * **Diagnóstico Ortopédico:** Uso do Capítulo XIII (M00-M99) e Capítulo XIX (S00-T98) para traumatismos 1, Histórico.  
-* **Gatilho S-RED:** Se selecionado "Lesão: Óssea" \+ "Origem: Por Estresse" (ou CID-10 M84.3), o sistema ativa automaticamente o protocolo multidisciplinar de S-RED 12, 13\.
+* **Gatilho S-RED:** Se selecionado "Lesão: Óssea" \+ "Origem: Por Estresse" (ou CID-10 M84.3), o sistema ativa automaticamente o protocolo multidisciplinar de S-RED 12, 13\. Nessa condição, no Campo 2 é exibido o campo **Decisão S-RED**, com seleção obrigatória entre **S-RED Positivo** e **S-RED Negativo**.
 
 ### 4.2. Módulo de Reabilitação (Fisioterapia e Educador Físico)
 

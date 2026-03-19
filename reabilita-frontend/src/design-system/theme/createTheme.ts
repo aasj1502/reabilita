@@ -1,3 +1,4 @@
+import { type PaletteMode } from '@mui/material';
 import { ThemeOptions, createTheme } from '@mui/material/styles';
 
 import { colorTokens, type ColorTokens } from '../tokens';
@@ -6,22 +7,48 @@ import { createPalette } from './palette';
 import { createTypography } from './typography';
 import type { ThemeOption } from './types';
 
-export const buildThemeOption = (tokens: ColorTokens = colorTokens): ThemeOption => ({
-	colors: tokens,
-	heading: tokens.grey900,
-	paper: tokens.paper,
-	backgroundDefault: tokens.paper,
-	background: tokens.primaryLight,
-	darkTextPrimary: tokens.grey700,
-	darkTextSecondary: tokens.grey500,
-	textDark: tokens.grey900,
-	menuSelected: tokens.secondaryDark,
-	menuSelectedBack: tokens.secondaryLight,
-	divider: tokens.grey200,
-});
+export const buildThemeOption = (
+	mode: PaletteMode = 'light',
+	tokens: ColorTokens = colorTokens,
+): ThemeOption => {
+	if (mode === 'dark') {
+		return {
+			mode,
+			colors: tokens,
+			heading: tokens.darkTextTitle,
+			paper: tokens.darkPaper,
+			backgroundDefault: tokens.darkBackground,
+			background: tokens.darkLevel1,
+			darkTextPrimary: tokens.darkTextPrimary,
+			darkTextSecondary: tokens.darkTextSecondary,
+			textDark: tokens.darkTextTitle,
+			menuSelected: tokens.secondaryLight,
+			menuSelectedBack: tokens.darkLevel2,
+			divider: tokens.darkLevel2,
+		};
+	}
 
-export const createAppTheme = (tokens: ColorTokens = colorTokens) => {
-	const themeOption = buildThemeOption(tokens);
+	return {
+		mode,
+		colors: tokens,
+		heading: tokens.grey900,
+		paper: tokens.paper,
+		backgroundDefault: tokens.grey50,
+		background: tokens.primaryLight,
+		darkTextPrimary: tokens.grey700,
+		darkTextSecondary: tokens.grey500,
+		textDark: tokens.grey900,
+		menuSelected: tokens.secondaryDark,
+		menuSelectedBack: tokens.secondaryLight,
+		divider: tokens.grey200,
+	};
+};
+
+export const createAppTheme = (
+	mode: PaletteMode = 'light',
+	tokens: ColorTokens = colorTokens,
+) => {
+	const themeOption = buildThemeOption(mode, tokens);
 
 	const baseTheme = createTheme({
 		direction: 'ltr',

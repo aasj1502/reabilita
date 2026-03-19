@@ -1,6 +1,8 @@
+import type { PaletteMode } from '@mui/material';
 import type { ColorTokens } from '../tokens';
 
 export type ThemeOption = {
+	mode: PaletteMode;
 	colors: ColorTokens;
 	heading: string;
 	paper: string;

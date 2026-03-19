@@ -1,6 +1,7 @@
 from datetime import datetime, time
 from math import ceil
 
+from django.db.models import Q
 from django.utils import timezone
 from django.utils.dateparse import parse_date
 from rest_framework import status
@@ -9,8 +10,26 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
-from .models import Atendimento, CargaReferenciaHistorico, CargaStatus, EvolucaoMultidisciplinar
+from .models import (
+    Atendimento,
+    CargaReferenciaHistorico,
+    CargaStatus,
+    Cid10Categoria,
+    CidOMorfologia,
+    EvolucaoMultidisciplinar,
+    OrigemLesao,
+    TipoLesao,
+)
 from .permissions import IsProfissionalSaude, IsStaffUser
+from .references import (
+    DECISAO_SRED_OPTIONS,
+    DISPOSICAO_OPTIONS,
+    ENCAMINHAMENTOS_OPTIONS,
+    EXAMES_COMPLEMENTARES_OPTIONS,
+    TIPO_ATENDIMENTO_OPTIONS,
+    build_atividade_contexto_options,
+    build_sac_reference_maps,
+)
 from .serializers import AtendimentoSerializer, CargaReferenciasSerializer, EvolucaoMultidisciplinarSerializer
 from .services import load_referencias_saude
 
@@ -25,6 +44,84 @@ class EvolucaoMultidisciplinarViewSet(ModelViewSet):
     queryset = EvolucaoMultidisciplinar.objects.select_related("atendimento", "profissional").all()
     serializer_class = EvolucaoMultidisciplinarSerializer
     permission_classes = [IsAuthenticated, IsProfissionalSaude]
+
+
+class AtendimentoReferenciasView(APIView):
+    permission_classes = [IsAuthenticated, IsProfissionalSaude]
+
+    def get(self, request):
+        sac_maps = build_sac_reference_maps()
+        atividade_contexto = build_atividade_contexto_options()
+
+        return Response(
+            {
+                "tipo_atendimento_options": TIPO_ATENDIMENTO_OPTIONS,
+                "tipo_lesao_options": [escolha for escolha, _label in TipoLesao.choices],
+                "origem_lesao_options": [escolha for escolha, _label in OrigemLesao.choices],
+                "decisao_sred_options": DECISAO_SRED_OPTIONS,
+                "exames_complementares_options": EXAMES_COMPLEMENTARES_OPTIONS,
+                "encaminhamentos_options": ENCAMINHAMENTOS_OPTIONS,
+                "disposicao_options": DISPOSICAO_OPTIONS,
+                **atividade_contexto,
+                **sac_maps,
+            },
+            status=status.HTTP_200_OK,
+        )
+
+
+class Cid10AutocompleteView(APIView):
+    permission_classes = [IsAuthenticated, IsProfissionalSaude]
+
+    def get(self, request):
+        query = (request.query_params.get("q") or "").strip()
+        limit_param = request.query_params.get("limit", "15")
+
+        try:
+            limit = max(1, min(int(limit_param), 50))
+        except ValueError:
+            limit = 15
+
+        queryset = Cid10Categoria.objects.all()
+        if query:
+            queryset = queryset.filter(Q(codigo__icontains=query) | Q(descricao__icontains=query))
+
+        items = [
+            {
+                "codigo": item.codigo,
+                "descricao": item.descricao,
+            }
+            for item in queryset.order_by("codigo")[:limit]
+        ]
+
+        return Response({"items": items}, status=status.HTTP_200_OK)
+
+
+class CidOAutocompleteView(APIView):
+    permission_classes = [IsAuthenticated, IsProfissionalSaude]
+
+    def get(self, request):
+        query = (request.query_params.get("q") or "").strip()
+        limit_param = request.query_params.get("limit", "15")
+
+        try:
+            limit = max(1, min(int(limit_param), 50))
+        except ValueError:
+            limit = 15
+
+        queryset = CidOMorfologia.objects.all()
+        if query:
+            queryset = queryset.filter(Q(codigo__icontains=query) | Q(descricao__icontains=query))
+
+        items = [
+            {
+                "codigo": item.codigo,
+                "descricao": item.descricao,
+                "referencia": item.referencia,
+            }
+            for item in queryset.order_by("codigo")[:limit]
+        ]
+
+        return Response({"items": items}, status=status.HTTP_200_OK)
 
 
 class CargaReferenciasSaudeView(APIView):

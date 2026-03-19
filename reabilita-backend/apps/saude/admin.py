@@ -69,6 +69,7 @@ class AtendimentoAdmin(admin.ModelAdmin):
         "medico",
         "tipo_lesao",
         "origem_lesao",
+        "decisao_sred",
         "codigo_cid10",
         "flag_sred",
     )

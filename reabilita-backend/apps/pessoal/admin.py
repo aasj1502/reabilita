@@ -5,7 +5,7 @@ from .models import Militar, ProfissionalSaude
 
 @admin.register(Militar)
 class MilitarAdmin(admin.ModelAdmin):
-    list_display = ("nr_militar", "nome_completo", "posto_graduacao", "is_instrutor")
+    list_display = ("nr_militar", "nome_completo", "sexo", "turma", "posto_graduacao", "is_instrutor")
     search_fields = ("nr_militar", "nome_completo")
 
 

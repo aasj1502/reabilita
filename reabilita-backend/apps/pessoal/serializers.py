@@ -10,6 +10,8 @@ class MilitarSerializer(serializers.ModelSerializer):
             "id",
             "nr_militar",
             "nome_completo",
+            "sexo",
+            "turma",
             "posto_graduacao",
             "arma_quadro_servico",
             "curso",
@@ -29,3 +31,21 @@ class ProfissionalSaudeSerializer(serializers.ModelSerializer):
             "registro_profissional",
             "ativo",
         ]
+
+
+class AuthLoginSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=150)
+    password = serializers.CharField(style={"input_type": "password"}, trim_whitespace=False)
+
+
+class AuthUserSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    username = serializers.CharField()
+    first_name = serializers.CharField(allow_blank=True)
+    last_name = serializers.CharField(allow_blank=True)
+    is_staff = serializers.BooleanField()
+
+
+class AuthSessionSerializer(serializers.Serializer):
+    is_authenticated = serializers.BooleanField()
+    user = AuthUserSerializer(allow_null=True)

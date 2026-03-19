@@ -124,6 +124,16 @@ class Lateralidade(models.TextChoices):
     NAO_E_O_CASO = "Não é o caso", "Não é o caso"
 
 
+class TipoAtendimento(models.TextChoices):
+    INICIAL = "Inicial", "Inicial"
+    RETORNO = "Retorno", "Retorno"
+
+
+class DecisaoSred(models.TextChoices):
+    POSITIVO = "S-RED Positivo", "S-RED Positivo"
+    NEGATIVO = "S-RED Negativo", "S-RED Negativo"
+
+
 class Atendimento(models.Model):
     data_registro = models.DateTimeField(auto_now_add=True)
     cadete = models.ForeignKey("pessoal.Militar", on_delete=models.PROTECT, related_name="atendimentos")
@@ -132,12 +142,31 @@ class Atendimento(models.Model):
         on_delete=models.PROTECT,
         related_name="atendimentos_medicos",
     )
+    tipo_atendimento = models.CharField(
+        max_length=20,
+        choices=TipoAtendimento.choices,
+        default=TipoAtendimento.INICIAL,
+    )
     tipo_lesao = models.CharField(max_length=20, choices=TipoLesao.choices)
     origem_lesao = models.CharField(max_length=30, choices=OrigemLesao.choices)
+    segmento_corporal = models.CharField(max_length=120, blank=True)
     estrutura_anatomica = models.CharField(max_length=120)
+    localizacao_lesao = models.CharField(max_length=255, blank=True)
     lateralidade = models.CharField(max_length=20, choices=Lateralidade.choices)
-    codigo_cid10 = models.CharField(max_length=10)
+    classificacao_atividade = models.CharField(max_length=120, blank=True)
+    tipo_atividade = models.CharField(max_length=120, blank=True)
+    tfm_taf = models.CharField(max_length=120, blank=True)
+    modalidade_esportiva = models.CharField(max_length=120, blank=True)
+    conduta_terapeutica = models.CharField(max_length=120, blank=True)
+    decisao_sred = models.CharField(max_length=20, choices=DecisaoSred.choices, blank=True, default="")
+    solicitar_exames_complementares = models.BooleanField(default=False)
+    exames_complementares = models.JSONField(default=list, blank=True)
+    encaminhamentos_multidisciplinares = models.JSONField(default=list, blank=True)
+    disposicao_cadete = models.JSONField(default=list, blank=True)
+    codigo_cid10 = models.CharField(max_length=10, blank=True, default="")
+    cid10_secundarios = models.JSONField(default=list, blank=True)
     codigo_cido = models.CharField(max_length=10, null=True, blank=True)
+    notas_clinicas = models.TextField(blank=True)
     flag_sred = models.BooleanField(default=False, editable=False)
 
     class Meta:
@@ -181,6 +210,16 @@ class Atendimento(models.Model):
         if cido.startswith(morfologias_osseas) and not cid10.startswith(("C40", "C41")):
             errors["codigo_cid10"] = "Morfologias CID-O ósseas exigem CID-10 no intervalo C40-C41."
 
+    def _validar_decisao_sred(self, errors: dict[str, str]) -> None:
+        deve_ativar_sred = self._deve_ativar_sred()
+        decisao = (self.decisao_sred or "").strip()
+
+        if deve_ativar_sred and not decisao:
+            errors["decisao_sred"] = "Informe a decisão S-RED (S-RED Positivo ou S-RED Negativo)."
+
+        if not deve_ativar_sred and decisao:
+            self.decisao_sred = ""
+
     def clean(self) -> None:
         errors = {}
 
@@ -189,6 +228,7 @@ class Atendimento(models.Model):
 
         self._validar_lateralidade(errors)
         self._validar_consistencia_oncologica(errors)
+        self._validar_decisao_sred(errors)
 
         if errors:
             raise ValidationError(errors)

@@ -1,14 +1,30 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { createAtendimento, listAtendimentos } from '../services/atendimentos.service';
-import type { Atendimento, CreateAtendimentoPayload } from '../types/atendimento';
+import {
+	createAtendimento,
+	getAtendimentoReferencias,
+	listAtendimentos,
+} from '../services/atendimentos.service';
+import type {
+	Atendimento,
+	AtendimentoReferenciasResponse,
+	CreateAtendimentoPayload,
+} from '../types/atendimento';
 
 const QUERY_KEY_ATENDIMENTOS = ['atendimentos'];
+const QUERY_KEY_ATENDIMENTO_REFERENCIAS = ['atendimentos-referencias'];
 
 export const useAtendimentos = () => {
 	return useQuery<Atendimento[]>({
 		queryKey: QUERY_KEY_ATENDIMENTOS,
 		queryFn: listAtendimentos,
+	});
+};
+
+export const useAtendimentoReferencias = () => {
+	return useQuery<AtendimentoReferenciasResponse>({
+		queryKey: QUERY_KEY_ATENDIMENTO_REFERENCIAS,
+		queryFn: getAtendimentoReferencias,
 	});
 };
 

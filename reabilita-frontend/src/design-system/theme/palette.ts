@@ -3,6 +3,7 @@ import type { PaletteOptions } from '@mui/material/styles';
 import type { ThemeOption } from './types';
 
 export const createPalette = (theme: ThemeOption): PaletteOptions => ({
+	mode: theme.mode,
 	common: {
 		black: theme.colors.darkPaper,
 	},

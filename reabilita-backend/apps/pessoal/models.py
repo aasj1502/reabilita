@@ -4,6 +4,8 @@ from django.db import models
 class Militar(models.Model):
     nr_militar = models.CharField(max_length=30, unique=True)
     nome_completo = models.CharField(max_length=255)
+    sexo = models.CharField(max_length=30, blank=True)
+    turma = models.CharField(max_length=40, blank=True)
     posto_graduacao = models.CharField(max_length=80, blank=True)
     arma_quadro_servico = models.CharField(max_length=80, blank=True)
     curso = models.CharField(max_length=120, blank=True)

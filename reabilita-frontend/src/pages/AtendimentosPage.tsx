@@ -27,7 +27,7 @@ import {
 import { AtendimentoList } from '../components/atendimento/AtendimentoList';
 import type { TipoLesao } from '../types/atendimento';
 
-type AtendimentosOrderBy = 'data_registro' | 'codigo_cid10' | 'id';
+type AtendimentosOrderBy = 'data_registro' | 'codigo_cid10' | 'id' | 'decisao_sred';
 type AtendimentosOrderDir = 'asc' | 'desc';
 type SredFiltro = '' | 'sim' | 'nao';
 
@@ -38,10 +38,17 @@ const tipoLesaoOptions: TipoLesao[] = [
 	'Tendinosa',
 	'Neurológica',
 ];
-const orderByOptions: AtendimentosOrderBy[] = ['data_registro', 'codigo_cid10', 'id'];
+const orderByOptions: AtendimentosOrderBy[] = ['data_registro', 'codigo_cid10', 'id', 'decisao_sred'];
 const orderDirOptions: AtendimentosOrderDir[] = ['asc', 'desc'];
 const pageSizeOptions = [10, 20, 50, 100];
 const sredOptions: Exclude<SredFiltro, ''>[] = ['sim', 'nao'];
+
+const defaultOrderDirectionByField: Record<AtendimentosOrderBy, AtendimentosOrderDir> = {
+	data_registro: 'desc',
+	codigo_cid10: 'asc',
+	id: 'desc',
+	decisao_sred: 'asc',
+};
 
 const urlKeys = {
 	page: 'atd_page',
@@ -212,6 +219,17 @@ export const AtendimentosPage = () => {
 
 			if (ordenarPor === 'id') {
 				compare = a.id - b.id;
+			} else if (ordenarPor === 'decisao_sred') {
+				const rank = (value: string): number => {
+					if (value === 'S-RED Positivo') {
+						return 2;
+					}
+					if (value === 'S-RED Negativo') {
+						return 1;
+					}
+					return 0;
+				};
+				compare = rank(a.decisao_sred) - rank(b.decisao_sred);
 			} else if (ordenarPor === 'codigo_cid10') {
 				compare = a.codigo_cid10.localeCompare(b.codigo_cid10, 'pt-BR');
 			} else {
@@ -284,6 +302,17 @@ export const AtendimentosPage = () => {
 		setTamanhoPagina(20);
 		setOrdenarPor('data_registro');
 		setDirecaoOrdenacao('desc');
+	};
+
+	const handleOrdenacaoTabela = (campo: AtendimentosOrderBy) => {
+		setPaginaAtual(1);
+		if (ordenarPor === campo) {
+			setDirecaoOrdenacao((current) => (current === 'asc' ? 'desc' : 'asc'));
+			return;
+		}
+
+		setOrdenarPor(campo);
+		setDirecaoOrdenacao(defaultOrderDirectionByField[campo]);
 	};
 
 	if (isLoading) {
@@ -404,6 +433,7 @@ export const AtendimentosPage = () => {
 							<MenuItem value="data_registro">Data</MenuItem>
 							<MenuItem value="codigo_cid10">CID-10</MenuItem>
 							<MenuItem value="id">ID</MenuItem>
+							<MenuItem value="decisao_sred">Decisão S-RED</MenuItem>
 						</TextField>
 						<TextField
 							select
@@ -456,7 +486,12 @@ export const AtendimentosPage = () => {
 					<Typography variant="body2" color="text.secondary">
 						Total: {totalItens} registro(s) · Página {paginaExibida} de {totalPaginas}
 					</Typography>
-					<AtendimentoList items={paginatedItems} />
+					<AtendimentoList
+						items={paginatedItems}
+						orderBy={ordenarPor}
+						orderDir={direcaoOrdenacao}
+						onSortChange={handleOrdenacaoTabela}
+					/>
 					<PaginationControlsRow
 						canGoPrevious={podeVoltarPagina}
 						canGoNext={podeAvancarPagina}
