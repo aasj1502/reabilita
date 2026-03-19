@@ -49,6 +49,11 @@ fi
 echo "[backend] Executando migrações..."
 python manage.py migrate --noinput
 
+if [ -n "${DJANGO_SUPERUSER_PASSWORD:-}" ]; then
+  echo "[backend] Verificando superusuário padrão..."
+  python manage.py seed_admin
+fi
+
 if [ "${RUN_SEED_REFERENCIAS:-false}" = "true" ]; then
   echo "[backend] Executando carga de referências clínicas..."
   python manage.py seed_referencias_saude
