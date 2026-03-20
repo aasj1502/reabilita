@@ -15,8 +15,10 @@ from .serializers import MilitarSerializer, ProfissionalSaudeSerializer
 ALLOWED_CSV_FIELDS = {
     "nr_militar",
     "nome_completo",
+    "nome_guerra",
     "sexo",
     "turma",
+    "ano",
     "posto_graduacao",
     "arma_quadro_servico",
     "curso",

@@ -1,10 +1,15 @@
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
+import FitnessCenterOutlinedIcon from '@mui/icons-material/FitnessCenterOutlined';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import MedicalServicesOutlinedIcon from '@mui/icons-material/MedicalServicesOutlined';
 import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import PsychologyOutlinedIcon from '@mui/icons-material/PsychologyOutlined';
+import RestaurantOutlinedIcon from '@mui/icons-material/RestaurantOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+import SpaOutlinedIcon from '@mui/icons-material/SpaOutlined';
 import WbSunnyOutlinedIcon from '@mui/icons-material/WbSunnyOutlined';
 import {
 	Box,
@@ -117,7 +122,7 @@ export const ClinicalLayout = () => {
 								<ListItemIcon>
 									<GroupOutlinedIcon />
 								</ListItemIcon>
-								<ListItemText primary="Cadetes / Pacientes" />
+								<ListItemText primary="Cadetes / Alunos" />
 							</ListItemButton>
 						</ListItem>
 
@@ -137,21 +142,77 @@ export const ClinicalLayout = () => {
 
 						<ListItem sx={{ pt: 1, pb: 0.5 }}>
 							<Typography variant="caption" color="text.secondary" fontWeight={600}>
-								Atendimentos
+								Módulos
 							</Typography>
 						</ListItem>
 
 						<ListItem disablePadding>
 							<ListItemButton
 								component={RouterLink}
-								to="/atendimentos/novo"
-								selected={isCurrentRoute(location.pathname, '/atendimentos/novo')}
+								to="/medico"
+								selected={isCurrentRoute(location.pathname, '/medico')}
 								sx={{ minHeight: 44 }}
 							>
 								<ListItemIcon>
-									<PersonAddAltOutlinedIcon />
+									<MedicalServicesOutlinedIcon />
 								</ListItemIcon>
-								<ListItemText primary="Novo Atendimento" />
+								<ListItemText primary="Médico" />
+							</ListItemButton>
+						</ListItem>
+
+						<ListItem disablePadding>
+							<ListItemButton
+								component={RouterLink}
+								to="/fisioterapia"
+								selected={isCurrentRoute(location.pathname, '/fisioterapia')}
+								sx={{ minHeight: 44 }}
+							>
+								<ListItemIcon>
+									<SpaOutlinedIcon />
+								</ListItemIcon>
+								<ListItemText primary="Fisioterapia" />
+							</ListItemButton>
+						</ListItem>
+
+						<ListItem disablePadding>
+							<ListItemButton
+								component={RouterLink}
+								to="/educador-fisico"
+								selected={isCurrentRoute(location.pathname, '/educador-fisico')}
+								sx={{ minHeight: 44 }}
+							>
+								<ListItemIcon>
+									<FitnessCenterOutlinedIcon />
+								</ListItemIcon>
+								<ListItemText primary="Educador Físico" />
+							</ListItemButton>
+						</ListItem>
+
+						<ListItem disablePadding>
+							<ListItemButton
+								component={RouterLink}
+								to="/nutricao"
+								selected={isCurrentRoute(location.pathname, '/nutricao')}
+								sx={{ minHeight: 44 }}
+							>
+								<ListItemIcon>
+									<RestaurantOutlinedIcon />
+								</ListItemIcon>
+								<ListItemText primary="Nutrição" />
+							</ListItemButton>
+						</ListItem>
+
+						<ListItem disablePadding>
+							<ListItemButton
+								component={RouterLink}
+								to="/psicopedagogia"
+								selected={isCurrentRoute(location.pathname, '/psicopedagogia')}
+								sx={{ minHeight: 44 }}
+							>
+								<ListItemIcon>
+									<PsychologyOutlinedIcon />
+								</ListItemIcon>
+								<ListItemText primary="Psicopedagogia" />
 							</ListItemButton>
 						</ListItem>
 
@@ -222,14 +283,6 @@ export const ClinicalLayout = () => {
 						}}
 					>
 						<Stack direction={{ xs: 'column', sm: 'row' }} justifyContent="flex-end" spacing={1}>
-							<Button
-								variant="outlined"
-								component={RouterLink}
-								to="/cadetes/novo"
-								sx={{ minHeight: 44, minWidth: 44 }}
-							>
-								+ Cadete
-							</Button>
 							<Button
 								variant="contained"
 								component={RouterLink}

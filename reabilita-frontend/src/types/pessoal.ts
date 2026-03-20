@@ -2,8 +2,10 @@ export interface Militar {
 	id: number;
 	nr_militar: string;
 	nome_completo: string;
+	nome_guerra: string;
 	sexo: string;
 	turma: string;
+	ano: string;
 	posto_graduacao: string;
 	arma_quadro_servico: string;
 	curso: string;
@@ -15,8 +17,10 @@ export interface Militar {
 export interface CreateMilitarPayload {
 	nr_militar: string;
 	nome_completo: string;
+	nome_guerra?: string;
 	sexo?: string;
 	turma?: string;
+	ano?: string;
 	posto_graduacao?: string;
 	arma_quadro_servico?: string;
 	curso?: string;

@@ -31,7 +31,7 @@ import {
 	useUpdateSystemUser,
 } from '../hooks/useAuthUsuarios';
 import { useAuth } from '../providers/AuthProvider';
-import type { CreateSystemUserPayload, SystemUserDetail, SystemUserProfile, UpdateUserPayload } from '../types/auth';
+import type { CreateSystemUserPayload, EspecialidadeMedica, FuncaoInstrutor, SystemUserDetail, SystemUserProfile, UpdateUserPayload } from '../types/auth';
 
 const perfisAcesso: SystemUserProfile[] = [
 	'Administrador',
@@ -39,15 +39,33 @@ const perfisAcesso: SystemUserProfile[] = [
 	'Educador Físico',
 	'Enfermeiro',
 	'Fisioterapeuta',
+	'Instrutor',
 	'Médico',
 	'Nutricionista',
 	'Psicopedagogo',
+];
+
+const especialidadesMedicas: EspecialidadeMedica[] = ['Ortopedista', 'Clínico Geral'];
+
+const funcoesInstrutor: FuncaoInstrutor[] = [
+	'Comandante do Corpo de Cadetes',
+	'Subcomandante do Corpo de Cadetes',
+	'S1-CC',
+	'Comandante de Curso',
+	'Comandante de Subunidade',
+	'Comandante de Pelotão',
 ];
 
 interface FormState {
 	nome_completo: string;
 	email: string;
 	perfil: '' | SystemUserProfile;
+	especialidade_medica: '' | EspecialidadeMedica;
+	funcao_instrutor: '' | FuncaoInstrutor;
+	posto_graduacao: string;
+	nome_guerra: string;
+	setor: string;
+	fracao: string;
 	senha_inicial: string;
 	confirmar_senha_inicial: string;
 	usuario_ativo: boolean;
@@ -57,6 +75,12 @@ const initialFormState: FormState = {
 	nome_completo: '',
 	email: '',
 	perfil: '',
+	especialidade_medica: '',
+	funcao_instrutor: '',
+	posto_graduacao: '',
+	nome_guerra: '',
+	setor: '',
+	fracao: '',
 	senha_inicial: '',
 	confirmar_senha_inicial: '',
 	usuario_ativo: true,
@@ -140,6 +164,20 @@ export const UsuariosPerfisPage = () => {
 			return;
 		}
 
+		if (formData.perfil === 'Médico' && !formData.especialidade_medica) {
+			const message = 'Selecione a especialidade médica.';
+			setSubmitError(message);
+			notify(message, 'error');
+			return;
+		}
+
+		if (formData.perfil === 'Instrutor' && !formData.funcao_instrutor) {
+			const message = 'Selecione a função do instrutor.';
+			setSubmitError(message);
+			notify(message, 'error');
+			return;
+		}
+
 		if (formData.senha_inicial !== formData.confirmar_senha_inicial) {
 			const message = 'As senhas não conferem.';
 			setSubmitError(message);
@@ -151,6 +189,12 @@ export const UsuariosPerfisPage = () => {
 			nome_completo: formData.nome_completo.trim(),
 			email: formData.email.trim(),
 			perfil: formData.perfil,
+			especialidade_medica: formData.perfil === 'Médico' ? formData.especialidade_medica : '',
+			funcao_instrutor: formData.perfil === 'Instrutor' ? formData.funcao_instrutor : '',
+			posto_graduacao: formData.posto_graduacao.trim(),
+			nome_guerra: formData.nome_guerra.trim(),
+			setor: formData.setor.trim(),
+			fracao: formData.fracao.trim(),
 			senha_inicial: formData.senha_inicial,
 			confirmar_senha_inicial: formData.confirmar_senha_inicial,
 			usuario_ativo: formData.usuario_ativo,
@@ -254,12 +298,17 @@ export const UsuariosPerfisPage = () => {
 			{/* Listagem de usuários cadastrados */}
 			<SectionCard title="Usuários Cadastrados" subtitle="Todos os usuários de sistema.">
 				<TableContainer sx={{ width: '100%', overflowX: 'auto' }}>
-					<Table size="small" sx={{ minWidth: 680 }}>
+					<Table size="small" sx={{ minWidth: 960 }}>
 						<TableHead>
 							<TableRow>
 								<TableCell>Nome</TableCell>
 								<TableCell>E-mail</TableCell>
 								<TableCell>Perfil</TableCell>
+								<TableCell>Espec./Função</TableCell>
+								<TableCell>Posto/Grad</TableCell>
+								<TableCell>Nome de Guerra</TableCell>
+								<TableCell>Setor</TableCell>
+								<TableCell>Fração</TableCell>
 								<TableCell>Ativo</TableCell>
 								<TableCell align="right">Ações</TableCell>
 							</TableRow>
@@ -275,6 +324,13 @@ export const UsuariosPerfisPage = () => {
 										</TableCell>
 										<TableCell>{usuario.email}</TableCell>
 										<TableCell>{usuario.perfil}</TableCell>
+										<TableCell>
+											{usuario.especialidade_medica || usuario.funcao_instrutor || '—'}
+										</TableCell>
+										<TableCell>{usuario.posto_graduacao || '—'}</TableCell>
+										<TableCell>{usuario.nome_guerra || '—'}</TableCell>
+										<TableCell>{usuario.setor || '—'}</TableCell>
+										<TableCell>{usuario.fracao || '—'}</TableCell>
 										<TableCell>{usuario.is_active ? 'Sim' : 'Não'}</TableCell>
 										<TableCell align="right">
 											<Button
@@ -290,7 +346,7 @@ export const UsuariosPerfisPage = () => {
 								))
 							) : (
 								<TableRow>
-									<TableCell colSpan={5} align="center">
+									<TableCell colSpan={10} align="center">
 										Nenhum usuário cadastrado
 									</TableCell>
 								</TableRow>
@@ -332,6 +388,8 @@ export const UsuariosPerfisPage = () => {
 							setFormData((current) => ({
 								...current,
 								perfil: event.target.value as FormState['perfil'],
+								especialidade_medica: event.target.value !== 'Médico' ? '' : current.especialidade_medica,
+								funcao_instrutor: event.target.value !== 'Instrutor' ? '' : current.funcao_instrutor,
 							}))
 						}
 						required
@@ -345,6 +403,96 @@ export const UsuariosPerfisPage = () => {
 							</MenuItem>
 						))}
 					</TextField>
+
+					{formData.perfil === 'Médico' ? (
+						<TextField
+							select
+							label="Especialidade Médica"
+							value={formData.especialidade_medica}
+							onChange={(event) =>
+								setFormData((current) => ({
+									...current,
+									especialidade_medica: event.target.value as FormState['especialidade_medica'],
+								}))
+							}
+							required
+							fullWidth
+							sx={{ '& .MuiInputBase-root': { minHeight: 44 } }}
+						>
+							<MenuItem value="">Selecione</MenuItem>
+							{especialidadesMedicas.map((esp) => (
+								<MenuItem key={esp} value={esp}>
+									{esp}
+								</MenuItem>
+							))}
+						</TextField>
+					) : null}
+
+					{formData.perfil === 'Instrutor' ? (
+						<TextField
+							select
+							label="Função"
+							value={formData.funcao_instrutor}
+							onChange={(event) =>
+								setFormData((current) => ({
+									...current,
+									funcao_instrutor: event.target.value as FormState['funcao_instrutor'],
+								}))
+							}
+							required
+							fullWidth
+							sx={{ '& .MuiInputBase-root': { minHeight: 44 } }}
+						>
+							<MenuItem value="">Selecione</MenuItem>
+							{funcoesInstrutor.map((fn) => (
+								<MenuItem key={fn} value={fn}>
+									{fn}
+								</MenuItem>
+							))}
+						</TextField>
+					) : null}
+
+					<Stack direction={{ xs: 'column', md: 'row' }} spacing={1.5}>
+						<TextField
+							label="Posto/Grad"
+							value={formData.posto_graduacao}
+							onChange={(event) =>
+								setFormData((current) => ({ ...current, posto_graduacao: event.target.value }))
+							}
+							fullWidth
+							sx={{ '& .MuiInputBase-root': { minHeight: 44 } }}
+						/>
+						<TextField
+							label="Nome de Guerra"
+							value={formData.nome_guerra}
+							onChange={(event) =>
+								setFormData((current) => ({ ...current, nome_guerra: event.target.value }))
+							}
+							fullWidth
+							sx={{ '& .MuiInputBase-root': { minHeight: 44 } }}
+						/>
+					</Stack>
+
+					<Stack direction={{ xs: 'column', md: 'row' }} spacing={1.5}>
+						<TextField
+							label="Setor"
+							value={formData.setor}
+							onChange={(event) =>
+								setFormData((current) => ({ ...current, setor: event.target.value }))
+							}
+							fullWidth
+							sx={{ '& .MuiInputBase-root': { minHeight: 44 } }}
+						/>
+						<TextField
+							label="Fração"
+							value={formData.fracao}
+							onChange={(event) =>
+								setFormData((current) => ({ ...current, fracao: event.target.value }))
+							}
+							fullWidth
+							sx={{ '& .MuiInputBase-root': { minHeight: 44 } }}
+						/>
+					</Stack>
 
 					<Stack direction={{ xs: 'column', md: 'row' }} spacing={1.5}>
 						<TextField

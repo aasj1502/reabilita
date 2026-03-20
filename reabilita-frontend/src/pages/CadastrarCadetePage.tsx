@@ -7,6 +7,7 @@ import {
 	Divider,
 	FormControlLabel,
 	LinearProgress,
+	MenuItem,
 	Stack,
 	TextField,
 	Typography,
@@ -22,8 +23,10 @@ import type { CreateMilitarPayload } from '../types/pessoal';
 interface FormState {
 	nr_militar: string;
 	nome_completo: string;
+	nome_guerra: string;
 	sexo: string;
 	turma: string;
+	ano: string;
 	posto_graduacao: string;
 	arma_quadro_servico: string;
 	curso: string;
@@ -35,8 +38,10 @@ interface FormState {
 const initialFormState: FormState = {
 	nr_militar: '',
 	nome_completo: '',
+	nome_guerra: '',
 	sexo: '',
 	turma: '',
+	ano: '',
 	posto_graduacao: '',
 	arma_quadro_servico: '',
 	curso: '',
@@ -44,6 +49,22 @@ const initialFormState: FormState = {
 	pelotao: '',
 	is_instrutor: false,
 };
+
+const postosGrad = ['Cadete', 'Aluno(a)'];
+
+const anosOpcoes = ['1º Ano', '2º Ano', '3º Ano', '4º Ano', '5º Ano'];
+
+const cursosOpcoes = [
+	'EsPCEx',
+	'Básico',
+	'Artilharia',
+	'Cavalaria',
+	'Engenharia',
+	'Comunicações',
+	'Infantaria',
+	'Intendência',
+	'Material Bélico',
+];
 
 const getErrorMessage = (error: unknown): string => {
 	if (axios.isAxiosError(error)) {
@@ -91,11 +112,13 @@ export const CadastrarCadetePage = () => {
 		const payload: CreateMilitarPayload = {
 			nr_militar: formData.nr_militar.trim(),
 			nome_completo: formData.nome_completo.trim(),
+			nome_guerra: formData.nome_guerra.trim(),
 			sexo: formData.sexo.trim(),
 			turma: formData.turma.trim(),
-			posto_graduacao: formData.posto_graduacao.trim(),
+			ano: formData.ano,
+			posto_graduacao: formData.posto_graduacao,
 			arma_quadro_servico: formData.arma_quadro_servico.trim(),
-			curso: formData.curso.trim(),
+			curso: formData.curso,
 			companhia: formData.companhia.trim(),
 			pelotao: formData.pelotao.trim(),
 			is_instrutor: formData.is_instrutor,
@@ -172,6 +195,29 @@ export const CadastrarCadetePage = () => {
 
 					<Stack direction={{ xs: 'column', md: 'row' }} spacing={1.5}>
 						<TextField
+							select
+							label="Posto/Grad"
+							value={formData.posto_graduacao}
+							onChange={(event) => handleChange('posto_graduacao', event.target.value)}
+							fullWidth
+							sx={{ '& .MuiInputBase-root': { minHeight: 44 } }}
+						>
+							<MenuItem value="">Selecione</MenuItem>
+							{postosGrad.map((pg) => (
+								<MenuItem key={pg} value={pg}>{pg}</MenuItem>
+							))}
+						</TextField>
+						<TextField
+							label="Nome de Guerra"
+							value={formData.nome_guerra}
+							onChange={(event) => handleChange('nome_guerra', event.target.value)}
+							fullWidth
+							sx={{ '& .MuiInputBase-root': { minHeight: 44 } }}
+						/>
+					</Stack>
+
+					<Stack direction={{ xs: 'column', md: 'row' }} spacing={1.5}>
+						<TextField
 							label="Sexo"
 							value={formData.sexo}
 							onChange={(event) => handleChange('sexo', event.target.value)}
@@ -185,16 +231,35 @@ export const CadastrarCadetePage = () => {
 							fullWidth
 							sx={{ '& .MuiInputBase-root': { minHeight: 44 } }}
 						/>
+						<TextField
+							select
+							label="Ano"
+							value={formData.ano}
+							onChange={(event) => handleChange('ano', event.target.value)}
+							fullWidth
+							sx={{ '& .MuiInputBase-root': { minHeight: 44 } }}
+						>
+							<MenuItem value="">Selecione</MenuItem>
+							{anosOpcoes.map((a) => (
+								<MenuItem key={a} value={a}>{a}</MenuItem>
+							))}
+						</TextField>
 					</Stack>
 
 					<Stack direction={{ xs: 'column', md: 'row' }} spacing={1.5}>
 						<TextField
-							label="Posto/Graduação"
-							value={formData.posto_graduacao}
-							onChange={(event) => handleChange('posto_graduacao', event.target.value)}
+							select
+							label="Curso"
+							value={formData.curso}
+							onChange={(event) => handleChange('curso', event.target.value)}
 							fullWidth
 							sx={{ '& .MuiInputBase-root': { minHeight: 44 } }}
-						/>
+						>
+							<MenuItem value="">Selecione</MenuItem>
+							{cursosOpcoes.map((c) => (
+								<MenuItem key={c} value={c}>{c}</MenuItem>
+							))}
+						</TextField>
 						<TextField
 							label="Arma/Quadro/Serviço"
 							value={formData.arma_quadro_servico}
@@ -205,13 +270,6 @@ export const CadastrarCadetePage = () => {
 					</Stack>
 
 					<Stack direction={{ xs: 'column', md: 'row' }} spacing={1.5}>
-						<TextField
-							label="Curso"
-							value={formData.curso}
-							onChange={(event) => handleChange('curso', event.target.value)}
-							fullWidth
-							sx={{ '& .MuiInputBase-root': { minHeight: 44 } }}
-						/>
 						<TextField
 							label="Companhia"
 							value={formData.companhia}

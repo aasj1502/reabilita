@@ -10,6 +10,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from .models import UserProfile
 from .serializers import (
     AuthChangePasswordSerializer,
     AuthCreateUserSerializer,
@@ -114,6 +115,12 @@ class UserManagementView(APIView):
         perfil = str(validated_data["perfil"]).strip()
         senha_inicial = str(validated_data["senha_inicial"])
         usuario_ativo = bool(validated_data.get("usuario_ativo", True))
+        especialidade_medica = str(validated_data.get("especialidade_medica") or "").strip()
+        funcao_instrutor = str(validated_data.get("funcao_instrutor") or "").strip()
+        posto_graduacao = str(validated_data.get("posto_graduacao") or "").strip()
+        nome_guerra = str(validated_data.get("nome_guerra") or "").strip()
+        setor = str(validated_data.get("setor") or "").strip()
+        fracao = str(validated_data.get("fracao") or "").strip()
 
         nome_partes = nome_completo.split(maxsplit=1)
         first_name = nome_partes[0] if nome_partes else ""
@@ -133,12 +140,28 @@ class UserManagementView(APIView):
         group, _created = Group.objects.get_or_create(name=perfil)
         user.groups.add(group)
 
+        UserProfile.objects.create(
+            user=user,
+            especialidade_medica=especialidade_medica if perfil == "Médico" else "",
+            funcao_instrutor=funcao_instrutor if perfil == "Instrutor" else "",
+            posto_graduacao=posto_graduacao,
+            nome_guerra=nome_guerra,
+            setor=setor,
+            fracao=fracao,
+        )
+
         payload = {
             "id": int(getattr(user, "pk", 0) or 0),
             "username": str(getattr(user, "username", "")),
             "email": str(getattr(user, "email", "")),
             "nome_completo": f"{str(getattr(user, 'first_name', '')).strip()} {str(getattr(user, 'last_name', '')).strip()}".strip(),
             "perfil": perfil,
+            "especialidade_medica": especialidade_medica if perfil == "Médico" else "",
+            "funcao_instrutor": funcao_instrutor if perfil == "Instrutor" else "",
+            "posto_graduacao": posto_graduacao,
+            "nome_guerra": nome_guerra,
+            "setor": setor,
+            "fracao": fracao,
             "is_active": bool(getattr(user, "is_active", False)),
             "is_staff": bool(getattr(user, "is_staff", False)),
         }

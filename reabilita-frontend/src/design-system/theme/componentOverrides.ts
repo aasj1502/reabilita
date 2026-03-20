@@ -49,6 +49,25 @@ export const createComponentOverrides = (theme: ThemeOption): Components<Theme> 
 							'&.MuiButton-text:hover': {
 								backgroundColor: theme.colors.darkLevel2,
 							},
+							'&.MuiButton-contained': {
+								backgroundColor: darkPrimaryMain,
+								color: '#ffffff',
+								'&:hover': {
+									backgroundColor: alpha(darkPrimaryMain, 0.85),
+								},
+								'&.Mui-disabled': {
+									backgroundColor: alpha(darkPrimaryMain, 0.35),
+									color: alpha('#ffffff', 0.5),
+								},
+							},
+							'&.MuiButton-outlined': {
+								color: darkPrimaryMain,
+								borderColor: darkPrimaryMain,
+								'&:hover': {
+									backgroundColor: alpha(darkPrimaryMain, 0.08),
+									borderColor: darkPrimaryMain,
+								},
+							},
 						}
 						: {}),
 				},
