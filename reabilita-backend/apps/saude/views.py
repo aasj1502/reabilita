@@ -18,6 +18,7 @@ from .models import (
     CidOMorfologia,
     EvolucaoMultidisciplinar,
     OrigemLesao,
+    SaudeReferenciaLesao,
     TipoLesao,
 )
 from .permissions import IsProfissionalSaude, IsStaffUser
@@ -30,7 +31,12 @@ from .references import (
     build_atividade_contexto_options,
     build_sac_reference_maps,
 )
-from .serializers import AtendimentoSerializer, CargaReferenciasSerializer, EvolucaoMultidisciplinarSerializer
+from .serializers import (
+    AtendimentoSerializer,
+    CargaReferenciasSerializer,
+    EvolucaoMultidisciplinarSerializer,
+    SaudeReferenciaLesaoSerializer,
+)
 from .services import load_referencias_saude
 
 
@@ -122,6 +128,103 @@ class CidOAutocompleteView(APIView):
         ]
 
         return Response({"items": items}, status=status.HTTP_200_OK)
+
+
+class SaudeReferenciaLesaoListView(APIView):
+    """Retorna referências de lesão com filtro hierárquico."""
+
+    permission_classes = [IsAuthenticated, IsProfissionalSaude]
+
+    def get(self, request):
+        qs = SaudeReferenciaLesao.objects.all()
+
+        tipo_tecido = (request.query_params.get("tipo_tecido") or "").strip()
+        regiao_geral = (request.query_params.get("regiao_geral") or "").strip()
+        sub_regiao = (request.query_params.get("sub_regiao") or "").strip()
+
+        if tipo_tecido:
+            qs = qs.filter(tipo_tecido=tipo_tecido)
+        if regiao_geral:
+            qs = qs.filter(regiao_geral=regiao_geral)
+        if sub_regiao:
+            qs = qs.filter(sub_regiao=sub_regiao)
+
+        serializer = SaudeReferenciaLesaoSerializer(qs, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class SaudeReferenciaLesaoLookupView(APIView):
+    """Busca (ou cria) uma SaudeReferenciaLesao com base nos 4 campos."""
+
+    permission_classes = [IsAuthenticated, IsProfissionalSaude]
+
+    def post(self, request):
+        serializer = SaudeReferenciaLesaoSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        obj, created = SaudeReferenciaLesao.objects.get_or_create(
+            tipo_tecido=serializer.validated_data["tipo_tecido"],
+            regiao_geral=serializer.validated_data["regiao_geral"],
+            sub_regiao=serializer.validated_data["sub_regiao"],
+            item_especifico=serializer.validated_data["item_especifico"],
+        )
+        result = SaudeReferenciaLesaoSerializer(obj)
+        return Response(
+            {"referencia": result.data, "created": created},
+            status=status.HTTP_201_CREATED if created else status.HTTP_200_OK,
+        )
+
+
+class SaudeReferenciaLesaoHierarquiaView(APIView):
+    """Retorna a hierarquia disponível: tipos, regiões, sub-regiões."""
+
+    permission_classes = [IsAuthenticated, IsProfissionalSaude]
+
+    def get(self, request):
+        tipo_tecido = (request.query_params.get("tipo_tecido") or "").strip()
+        regiao_geral = (request.query_params.get("regiao_geral") or "").strip()
+        sub_regiao = (request.query_params.get("sub_regiao") or "").strip()
+
+        qs = SaudeReferenciaLesao.objects.all()
+
+        tipos = sorted(qs.values_list("tipo_tecido", flat=True).distinct())
+
+        regioes = []
+        if tipo_tecido:
+            regioes = sorted(
+                qs.filter(tipo_tecido=tipo_tecido)
+                .values_list("regiao_geral", flat=True)
+                .distinct()
+            )
+
+        sub_regioes = []
+        if tipo_tecido and regiao_geral:
+            sub_regioes = sorted(
+                qs.filter(tipo_tecido=tipo_tecido, regiao_geral=regiao_geral)
+                .values_list("sub_regiao", flat=True)
+                .distinct()
+            )
+
+        itens = []
+        if tipo_tecido and regiao_geral and sub_regiao:
+            itens = sorted(
+                qs.filter(
+                    tipo_tecido=tipo_tecido,
+                    regiao_geral=regiao_geral,
+                    sub_regiao=sub_regiao,
+                )
+                .values_list("item_especifico", flat=True)
+                .distinct()
+            )
+
+        return Response(
+            {
+                "tipos_tecido": tipos,
+                "regioes_gerais": regioes,
+                "sub_regioes": sub_regioes,
+                "itens_especificos": itens,
+            },
+            status=status.HTTP_200_OK,
+        )
 
 
 class CargaReferenciasSaudeView(APIView):

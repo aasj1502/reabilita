@@ -38,8 +38,33 @@ class CidOMorfologia(models.Model):
         return f"{self.codigo} - {self.descricao}"
 
 
+class SaudeReferenciaLesao(models.Model):
+    """Catálogo normalizado de lesões extraído de analise_mapeamento_consolidado.csv."""
+
+    tipo_tecido = models.CharField(max_length=30, db_index=True)
+    regiao_geral = models.CharField(max_length=120, db_index=True)
+    sub_regiao = models.CharField(max_length=120, db_index=True)
+    item_especifico = models.CharField(max_length=255)
+
+    class Meta:
+        ordering = ["tipo_tecido", "regiao_geral", "sub_regiao", "item_especifico"]
+        verbose_name = "Referência de Lesão"
+        verbose_name_plural = "Referências de Lesões"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["tipo_tecido", "regiao_geral", "sub_regiao", "item_especifico"],
+                name="unique_referencia_lesao",
+            ),
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.tipo_tecido} | {self.regiao_geral} > {self.sub_regiao} > {self.item_especifico}"
+
+
 class SacMapeamento(models.Model):
     lesao = models.CharField(max_length=30, blank=True)
+
+    # --- Colunas legadas (DEPRECATED) – serão removidas após migração completa ---
     parte_corpo_ossea_articular = models.CharField(max_length=120, blank=True)
     parte_corpo_muscular = models.CharField(max_length=120, blank=True)
     parte_corpo_tendinosa = models.CharField(max_length=120, blank=True)
@@ -48,7 +73,25 @@ class SacMapeamento(models.Model):
     coluna = models.CharField(max_length=120, blank=True)
     bacia = models.CharField(max_length=120, blank=True)
     membros_inferiores = models.CharField(max_length=120, blank=True)
+    # --- Fim das colunas legadas ---
+
+    referencia_lesao = models.ForeignKey(
+        SaudeReferenciaLesao,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="sac_mapeamentos",
+        help_text="Referência normalizada da lesão.",
+    )
     lateralidade = models.CharField(max_length=30, blank=True)
+    sub_regiao_manual = models.CharField(
+        max_length=120, null=True, blank=True,
+        help_text="Sub-região informada manualmente quando ausente na referência.",
+    )
+    item_especifico_manual = models.CharField(
+        max_length=255, null=True, blank=True,
+        help_text="Item específico informado manualmente quando ausente na referência.",
+    )
     raw_data = models.JSONField(default=dict, blank=True)
     record_hash = models.CharField(max_length=64, blank=True, help_text="SHA-256 hash do registro para detecção de mudanças")
 
@@ -58,6 +101,8 @@ class SacMapeamento(models.Model):
         verbose_name_plural = "SAC Mapeamentos"
 
     def __str__(self) -> str:
+        if self.referencia_lesao:
+            return f"{self.lesao or 'Sem lesão'} - {self.referencia_lesao}"
         return f"{self.lesao or 'Sem lesão'} - {self.membros_superiores or self.coluna or self.bacia or self.membros_inferiores}"
 
 

@@ -9,6 +9,7 @@ from .models import (
     RecordChangeAudit,
     ReferenciaArquivoVersao,
     SacMapeamento,
+    SaudeReferenciaLesao,
 )
 
 
@@ -22,6 +23,13 @@ class Cid10CategoriaAdmin(admin.ModelAdmin):
 class CidOMorfologiaAdmin(admin.ModelAdmin):
     list_display = ("codigo", "descricao", "comportamento", "referencia")
     search_fields = ("codigo", "descricao")
+
+
+@admin.register(SaudeReferenciaLesao)
+class SaudeReferenciaLesaoAdmin(admin.ModelAdmin):
+    list_display = ("tipo_tecido", "regiao_geral", "sub_regiao", "item_especifico")
+    search_fields = ("tipo_tecido", "regiao_geral", "sub_regiao", "item_especifico")
+    list_filter = ("tipo_tecido", "regiao_geral")
 
 
 @admin.register(SacMapeamento)

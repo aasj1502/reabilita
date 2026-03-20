@@ -1,0 +1,469 @@
+﻿coluna_csv,item_detalhado,tipo_tecido
+fraturas,Membros Superiores,Óssea
+fraturas,Ombro,Óssea
+fraturas,Clavícula,Óssea
+fraturas,Úmero proximal,Óssea
+fraturas,Escápula,Óssea
+fraturas.1,Membros Superiores,Óssea
+fraturas.1,Braço,Óssea
+fraturas.1,Úmero diáfise,Óssea
+fraturas.2,Membros Superiores,Óssea
+fraturas.2,Cotovelo,Óssea
+fraturas.2,Úmero distal,Óssea
+fraturas.2,Cabeça do rádio,Óssea
+fraturas.2,Olécrano,Óssea
+fraturas.2,Ulna proximal,Óssea
+fraturas.3,Membros Superiores,Óssea
+fraturas.3,Antebraço,Óssea
+fraturas.3,Rádio diáfise,Óssea
+fraturas.3,Ulna diáfise,Óssea
+fraturas.4,Membros Superiores,Óssea
+fraturas.4,Punho,Óssea
+fraturas.4,Rádio distal,Óssea
+fraturas.4,Ulna distal,Óssea
+fraturas.4,Escafoide,Óssea
+fraturas.4,Semilunar,Óssea
+fraturas.4,Piramidal,Óssea
+fraturas.4,Capitato,Óssea
+fraturas.4,Hamato,Óssea
+fraturas.4,Trapézio,Óssea
+fraturas.4,Trapezoide,Óssea
+fraturas.4,Pisiforme,Óssea
+fraturas.5,Membros Superiores,Óssea
+fraturas.5,Mão,Óssea
+fraturas.5,1°Metacarpo,Óssea
+fraturas.5,2°Metacarpo,Óssea
+fraturas.5,3°Metacarpo,Óssea
+fraturas.5,4°Metacarpo,Óssea
+fraturas.5,5°Metacarpo,Óssea
+fraturas.6,Membros Superiores,Óssea
+fraturas.6,Mão - dedos,Óssea
+fraturas.6,Polegar - Falange proximal,Óssea
+fraturas.6,Polegar - Falange distal,Óssea
+fraturas.6,Indicador - Falange proximal,Óssea
+fraturas.6,Indicador - Falange média,Óssea
+fraturas.6,Indicador - Falange distal,Óssea
+fraturas.6,Médio - Falange proximal,Óssea
+fraturas.6,Médio - Falange média,Óssea
+fraturas.6,Médio - Falange distal,Óssea
+fraturas.6,Anelar - Falange proximal,Óssea
+fraturas.6,Anelar - Falange média,Óssea
+fraturas.6,Anelar - Falange distal,Óssea
+fraturas.6,Mínimo - Falange proximal,Óssea
+fraturas.6,Mínimo - Falange média,Óssea
+fraturas.6,Mínimo - Falange distal,Óssea
+fraturas.7,Coluna,Óssea
+fraturas.7,Cervical,Óssea
+fraturas.7,C1,Óssea
+fraturas.7,C2,Óssea
+fraturas.7,C3,Óssea
+fraturas.7,C4,Óssea
+fraturas.7,C5,Óssea
+fraturas.7,C6,Óssea
+fraturas.7,C7,Óssea
+fraturas.8,Coluna,Óssea
+fraturas.8,Torácica,Óssea
+fraturas.8,T1,Óssea
+fraturas.8,T2,Óssea
+fraturas.8,T3,Óssea
+fraturas.8,T4,Óssea
+fraturas.8,T5,Óssea
+fraturas.8,T6,Óssea
+fraturas.8,T7,Óssea
+fraturas.8,T8,Óssea
+fraturas.8,T9,Óssea
+fraturas.8,T10,Óssea
+fraturas.8,T11,Óssea
+fraturas.8,T12,Óssea
+fraturas.9,Coluna,Óssea
+fraturas.9,Lombar,Óssea
+fraturas.9,L1,Óssea
+fraturas.9,L2,Óssea
+fraturas.9,L3,Óssea
+fraturas.9,L4,Óssea
+fraturas.9,L5,Óssea
+fraturas.10,Coluna,Óssea
+fraturas.10,Sacrococcígea,Óssea
+fraturas.10,S1,Óssea
+fraturas.10,S2,Óssea
+fraturas.10,S3,Óssea
+fraturas.10,S4,Óssea
+fraturas.10,S5,Óssea
+fraturas.10,Cóccix,Óssea
+fraturas.11,Bacia,Óssea
+fraturas.11,Bacia,Óssea
+fraturas.11,Ilíaco,Óssea
+fraturas.11,Ísquio,Óssea
+fraturas.11,Púbico,Óssea
+fraturas.12,Membros Inferiores,Óssea
+fraturas.12,Quadril,Óssea
+fraturas.12,Acetábulo,Óssea
+fraturas.12,Fêmur proximal,Óssea
+fraturas.13,Membros Inferiores,Óssea
+fraturas.13,Coxa,Óssea
+fraturas.13,Fêmur diáfise,Óssea
+fraturas.14,Membros Inferiores,Óssea
+fraturas.14,Joelho,Óssea
+fraturas.14,Fêmur distal,Óssea
+fraturas.14,Tíbia proximal,Óssea
+fraturas.15,Membros Inferiores,Óssea
+fraturas.15,Perna,Óssea
+fraturas.15,Tíbia diáfise,Óssea
+fraturas.15,Fíbula diáfise,Óssea
+fraturas.15,Síndrome do estresse tibial medial,Óssea
+fraturas.16,Membros Inferiores,Óssea
+fraturas.16,Tornozelo,Óssea
+fraturas.16,Tíbia distal,Óssea
+fraturas.16,Fíbula distal,Óssea
+fraturas.16,Maléolo lateral,Óssea
+fraturas.16,Maléolo medial,Óssea
+fraturas.16,Maléolo posterior,Óssea
+fraturas.16,Tálus,Óssea
+fraturas.17,Membros Inferiores,Óssea
+fraturas.17,Pé,Óssea
+fraturas.17,Calcâneo,Óssea
+fraturas.17,Navicular,Óssea
+fraturas.17,Cuboide,Óssea
+fraturas.17,Cuneiforme medial,Óssea
+fraturas.17,Cuneiforme intermédio,Óssea
+fraturas.17,Cuneiforme lateral,Óssea
+fraturas.17,1°Metatarso,Óssea
+fraturas.17,2°Metatarso,Óssea
+fraturas.17,3°Metatarso,Óssea
+fraturas.17,4°Metatarso,Óssea
+fraturas.17,5°Metatarso,Óssea
+fraturas.18,Membros Inferiores,Óssea
+fraturas.18,Pé - dedos,Óssea
+fraturas.18,Hálux - Falange proximal,Óssea
+fraturas.18,Hálux - Falange distal,Óssea
+fraturas.18,Segundo - Falange proximal,Óssea
+fraturas.18,Segundo - Falange média,Óssea
+fraturas.18,Segundo - Falange distal,Óssea
+fraturas.18,Terceiro - Falange proximal,Óssea
+fraturas.18,Terceiro - Falange média,Óssea
+fraturas.18,Terceiro - Falange distal,Óssea
+fraturas.18,Quarto - Falange proximal,Óssea
+fraturas.18,Quarto - Falange média,Óssea
+fraturas.18,Quarto - Falange distal,Óssea
+fraturas.18,Quinto - Falange proximal,Óssea
+fraturas.18,Quinto - Falange média,Óssea
+fraturas.18,Quinto - Falange distal,Óssea
+lesões articulares,Membros Superiores,Articular
+lesões articulares,Esternoclavicular,Articular
+lesões articulares,Luxação esternoclavicular,Articular
+lesões articulares.1,Membros Superiores,Articular
+lesões articulares.1,Ombro,Articular
+lesões articulares.1,Luxação acromioclavicular,Articular
+lesões articulares.1,Contusão,Articular
+lesões articulares.1,Luxação glenoumeral,Articular
+lesões articulares.1,Instabilidade glenoumeral,Articular
+lesões articulares.1,Lesão SLAP,Articular
+lesões articulares.1,Discinesia escapulotorácica,Articular
+lesões articulares.1,Artrose acromioclavicular,Articular
+lesões articulares.1,Bursite,Articular
+lesões articulares.1,Tendinose manguito rotador,Articular
+lesões articulares.2,Membros Superiores,Articular
+lesões articulares.2,Cotovelo,Articular
+lesões articulares.2,Contusão,Articular
+lesões articulares.2,Luxação,Articular
+lesões articulares.2,Luxação rádio ulnar proximal,Articular
+lesões articulares.2,Lesão complexo ligamentar medial,Articular
+lesões articulares.2,Lesão complexo ligamentar lateral,Articular
+lesões articulares.3,Membros Superiores,Articular
+lesões articulares.3,Punho,Articular
+lesões articulares.3,Contusão,Articular
+lesões articulares.3,Luxação,Articular
+lesões articulares.3,Instabilidade rádio ulnar distal,Articular
+lesões articulares.3,Luxação ossos do carpo,Articular
+lesões articulares.3,Lesão ligamento escafossemilunar,Articular
+lesões articulares.3,Lesão ligamento semilunopiramidal,Articular
+lesões articulares.3,Lesão ligamento radiocarpal,Articular
+lesões articulares.3,Luxação periescafossemilunar,Articular
+lesões articulares.3,Fratura-luxação transescafosemilunar,Articular
+lesões articulares.4,Membros Superiores,Articular
+lesões articulares.4,Mão,Articular
+lesões articulares.4,Contusão,Articular
+lesões articulares.4,Luxação carpo - 1°metacarpo,Articular
+lesões articulares.4,Luxação carpo - 2°metacarpo,Articular
+lesões articulares.4,Luxação carpo - 3°metacarpo,Articular
+lesões articulares.4,Luxação carpo - 4°metacarpo,Articular
+lesões articulares.4,Luxação carpo - 5°metacarpo,Articular
+lesões articulares.5,Membros Superiores,Articular
+lesões articulares.5,Dedos,Articular
+lesões articulares.5,Polegar - lesão de steiner,Articular
+lesões articulares.5,Polegar - luxação matacarpofalangeana,Articular
+lesões articulares.5,Polegar - luxação interfalangeana,Articular
+lesões articulares.5,Polegar - contusão,Articular
+lesões articulares.5,Indicador - luxação metacarpofalangeana,Articular
+lesões articulares.5,Indicador - luxação interfalangeana proximal,Articular
+lesões articulares.5,Indicador - luxação interfalangeana distal,Articular
+lesões articulares.5,Indicador - contusão,Articular
+lesões articulares.5,Médio - luxação metacarpofalangeana,Articular
+lesões articulares.5,Médio - luxação interfalangeana proximal,Articular
+lesões articulares.5,Médio - luxação interfalangeana distal,Articular
+lesões articulares.5,Médio - contusão,Articular
+lesões articulares.5,Anelar - luxação metacarpofalangeana,Articular
+lesões articulares.5,Anelar - luxação interfalangeana proximal,Articular
+lesões articulares.5,Anelar - luxação interfalangeana distal,Articular
+lesões articulares.5,Anelar - contusão,Articular
+lesões articulares.5,Mínimo - luxação metacarpofalangeana,Articular
+lesões articulares.5,Mínimo - luxação interfalangeana proximal,Articular
+lesões articulares.5,Mínimo - luxação interfalangeana distal,Articular
+lesões articulares.5,Mínimo - contusão,Articular
+lesões articulares.6,Coluna,Articular
+lesões articulares.6,Cervical,Articular
+lesões articulares.6,Contusão cervical,Articular
+lesões articulares.6,Luxação C1-C2,Articular
+lesões articulares.6,Luxação C2-C3,Articular
+lesões articulares.6,Luxação C3-C4,Articular
+lesões articulares.6,Luxação C4-C5,Articular
+lesões articulares.6,Luxação C5-C6,Articular
+lesões articulares.6,Luxação C6-C7,Articular
+lesões articulares.6,Luxação C7-T1,Articular
+lesões articulares.6,Hérnia de disco C1-C2,Articular
+lesões articulares.6,Hérnia de disco C2-C3,Articular
+lesões articulares.6,Hérnia de disco C3-C4,Articular
+lesões articulares.6,Hérnia de disco C4-C5,Articular
+lesões articulares.6,Hérnia de disco C5-C6,Articular
+lesões articulares.6,Hérnia de disco C6-C7,Articular
+lesões articulares.6,Hérnia de disco C7-T1,Articular
+lesões articulares.7,Coluna,Articular
+lesões articulares.7,Torácica,Articular
+lesões articulares.7,Contusão torácica,Articular
+lesões articulares.7,Luxação T1-T2,Articular
+lesões articulares.7,Luxação T2-T3,Articular
+lesões articulares.7,Luxação T3-T4,Articular
+lesões articulares.7,Luxação T4-T5,Articular
+lesões articulares.7,Luxação T5-T6,Articular
+lesões articulares.7,Luxação T6-T7,Articular
+lesões articulares.7,Luxação T7-T8,Articular
+lesões articulares.7,Luxação T9-T10,Articular
+lesões articulares.7,Luxação T10-T11,Articular
+lesões articulares.7,Luxação T11-T12,Articular
+lesões articulares.7,Luxação T12-L1,Articular
+lesões articulares.7,Hérnia de disco T1-T2,Articular
+lesões articulares.7,Hérnia de disco T2-T3,Articular
+lesões articulares.7,Hérnia de disco T3-T4,Articular
+lesões articulares.7,Hérnia de disco T4-T5,Articular
+lesões articulares.7,Hérnia de disco T5-T6,Articular
+lesões articulares.7,Hérnia de disco T6-T7,Articular
+lesões articulares.7,Hérnia de disco T7-T8,Articular
+lesões articulares.7,Hérnia de disco T9-T10,Articular
+lesões articulares.7,Hérnia de disco T10-T11,Articular
+lesões articulares.7,Hérnia de disco T11-T12,Articular
+lesões articulares.7,Hérnia de disco T12-L1,Articular
+lesões articulares.8,Coluna,Articular
+lesões articulares.8,Lombar,Articular
+lesões articulares.8,Contusão lombar,Articular
+lesões articulares.8,Luxação L1-L2,Articular
+lesões articulares.8,Luxação L2-L3,Articular
+lesões articulares.8,Luxação L3-L4,Articular
+lesões articulares.8,Luxação L4-L5,Articular
+lesões articulares.8,Luxação L5-S1,Articular
+lesões articulares.8,Hérnia de disco L1-L2,Articular
+lesões articulares.8,Hérnia de disco L2-L3,Articular
+lesões articulares.8,Hérnia de disco L3-L4,Articular
+lesões articulares.8,Hérnia de disco L4-L5,Articular
+lesões articulares.8,Hérnia de disco L5-S1,Articular
+lesões articulares.9,Coluna,Articular
+lesões articulares.9,Sacrococcígea,Articular
+lesões articulares.9,Contusão sacro,Articular
+lesões articulares.9,Contusão cóccix,Articular
+lesões articulares.9,Luxação sacrococcígea,Articular
+lesões articulares.10,Bacia,Articular
+lesões articulares.10,Bacia,Articular
+lesões articulares.10,Luxação sacroilíaca,Articular
+lesões articulares.10,Sacroileíte,Articular
+lesões articulares.10,Pubeíte,Articular
+lesões articulares.10,Isquiopúbica,Articular
+lesões articulares.10,Iliopúbica,Articular
+lesões articulares.11,Membros Inferiores,Articular
+lesões articulares.11,Quadril,Articular
+lesões articulares.11,Contusão,Articular
+lesões articulares.11,Luxação,Articular
+lesões articulares.11,Lesão labrum,Articular
+lesões articulares.11,Impacto femoroacetabular,Articular
+lesões articulares.11,Bursite troncatérica,Articular
+lesões articulares.12,Membros Inferiores,Articular
+lesões articulares.12,Joelho,Articular
+lesões articulares.12,Contusão,Articular
+lesões articulares.12,Luxação,Articular
+lesões articulares.12,Luxação de patela,Articular
+lesões articulares.12,Lesão ligamento colateral medial,Articular
+lesões articulares.12,Lesão ligamento colateral lateral,Articular
+lesões articulares.12,Lesão ligamento cruzado anterior,Articular
+lesões articulares.12,Lesão ligamento cruzado posterior,Articular
+lesões articulares.12,Lesão canto posterolateral,Articular
+lesões articulares.12,Lesão ligamento femoropatelar medial,Articular
+lesões articulares.12,Lesão osteocondral,Articular
+lesões articulares.12,Instabilidade femoropatelar,Articular
+lesões articulares.12,Menisco medial,Articular
+lesões articulares.12,Menisco lateral,Articular
+lesões articulares.13,Membros Inferiores,Articular
+lesões articulares.13,Tornozelo,Articular
+lesões articulares.13,Contusão,Articular
+lesões articulares.13,Entorse,Articular
+lesões articulares.13,Luxação,Articular
+lesões articulares.13,Lesão complexo ligamentar lateral,Articular
+lesões articulares.13,Lesão complexo ligamentar medial,Articular
+lesões articulares.14,Membros Inferiores,Articular
+lesões articulares.14,Pé,Articular
+lesões articulares.14,Contusão,Articular
+lesões articulares.14,Luxação de Lis-Franc,Articular
+lesões articulares.14,Fratura-luxação de Lis Franc,Articular
+lesões articulares.14,Luxação tarso - 1°metatarso,Articular
+lesões articulares.14,Luxação tarso - 2°metatarso,Articular
+lesões articulares.14,Luxação tarso - 3°metatarso,Articular
+lesões articulares.14,Luxação tarso - 4°metatarso,Articular
+lesões articulares.14,Luxação tarso - 5°metatarso,Articular
+lesões articulares.15,Membros Inferiores,Articular
+lesões articulares.15,Dedos,Articular
+lesões articulares.15,Hálux - luxação metatarsofalangeana,Articular
+lesões articulares.15,Hálux - luxação interfalangeana,Articular
+lesões articulares.15,Hálux - contusão,Articular
+lesões articulares.15,Segundo - luxação metatarsofalangeana,Articular
+lesões articulares.15,Segundo - luxação interfalangeana proximal,Articular
+lesões articulares.15,Segundo - luxação interfalangeana distal,Articular
+lesões articulares.15,Segundo - contusão,Articular
+lesões articulares.15,Terceiro - luxação metatarsofalangeana,Articular
+lesões articulares.15,Terceiro - luxação interfalangeana proximal,Articular
+lesões articulares.15,Terceiro - luxação interfalangeana distal,Articular
+lesões articulares.15,Terceiro - contusão,Articular
+lesões articulares.15,Quarto - luxação luxação metatarsofalangeana,Articular
+lesões articulares.15,Quarto - luxação interfalangeana proximal,Articular
+lesões articulares.15,Quarto - luxação interfalangeana distal,Articular
+lesões articulares.15,Quarto - contusão,Articular
+lesões articulares.15,Quinto - luxação metatarsofalangeana,Articular
+lesões articulares.15,Quinto - luxação interfalangeana proximal,Articular
+lesões articulares.15,Quinto - luxação interfalangeana distal,Articular
+lesões articulares.15,Quinto - contusão,Articular
+lesões musculares,Membros Superiores,Muscular
+lesões musculares,Ombro,Muscular
+lesões musculares,Deltoide,Muscular
+lesões musculares,Supraespinhal,Muscular
+lesões musculares,Infraespinhal,Muscular
+lesões musculares,Subescapular,Muscular
+lesões musculares,Redondo menor,Muscular
+lesões musculares.1,Membros Superiores,Muscular
+lesões musculares.1,Braço,Muscular
+lesões musculares.1,Contusão,Muscular
+lesões musculares.1,Bíceps,Muscular
+lesões musculares.1,Braquial,Muscular
+lesões musculares.1,Tríceps,Muscular
+lesões musculares.2,Membros Superiores,Muscular
+lesões musculares.2,Antebraço,Muscular
+lesões musculares.2,Contusão,Muscular
+lesões musculares.2,Flexores,Muscular
+lesões musculares.2,Extensores,Muscular
+lesões musculares.3,Coluna,Muscular
+lesões musculares.3,Cervical,Muscular
+lesões musculares.3,Cervicalgia mecânica,Muscular
+lesões musculares.3,Torcicolo,Muscular
+lesões musculares.4,Tórax,Muscular
+lesões musculares.4,Caixa torácica,Muscular
+lesões musculares.4,Peitoral,Muscular
+lesões musculares.4,Contratura trapézio,Muscular
+lesões musculares.4,Dorsalgia mecânica,Muscular
+lesões musculares.4,Musculatura dorsal,Muscular
+lesões musculares.5,Core,Muscular
+lesões musculares.5,Lombar,Muscular
+lesões musculares.5,Musculatura lombar,Muscular
+lesões musculares.5,Lombalgia mecânica,Muscular
+lesões musculares.6,Core,Muscular
+lesões musculares.6,Abdome,Muscular
+lesões musculares.6,Musculatura abdominal,Muscular
+lesões musculares.7,Membros Inferiores,Muscular
+lesões musculares.7,Quadril,Muscular
+lesões musculares.7,Psoas,Muscular
+lesões musculares.7,Glúteo mínimo,Muscular
+lesões musculares.7,Glúteo médio,Muscular
+lesões musculares.7,Glúteo máximo,Muscular
+lesões musculares.7,Rotadores externos,Muscular
+lesões musculares.8,Membros Inferiores,Muscular
+lesões musculares.8,Coxa,Muscular
+lesões musculares.8,Contusão,Muscular
+lesões musculares.8,Adutores,Muscular
+lesões musculares.8,Sartório,Muscular
+lesões musculares.8,Quadríceps,Muscular
+lesões musculares.8,Isquiotibiais,Muscular
+lesões musculares.8,Trato iliotibial,Muscular
+lesões musculares.9,Membros Inferiores,Muscular
+lesões musculares.9,Perna,Muscular
+lesões musculares.9,Contusão,Muscular
+lesões musculares.9,Extensores tornozelo-dedos,Muscular
+lesões musculares.9,Fibulares,Muscular
+lesões musculares.9,Sóleo,Muscular
+lesões musculares.9,Gastrocnêmio,Muscular
+lesões musculares.9,Tibial posterior,Muscular
+lesões musculares.9,Flexores tornozelo-dedos,Muscular
+tendinopatias,Membros Superiores,Tendinosa
+tendinopatias,Ombro,Tendinosa
+tendinopatias,Cabeça longa do bíceps,Tendinosa
+tendinopatias,Cabeça curta do bíceps,Tendinosa
+tendinopatias,Deltoide,Tendinosa
+tendinopatias,Supraespinhal,Tendinosa
+tendinopatias,Infraespinhal,Tendinosa
+tendinopatias,Subescapular,Tendinosa
+tendinopatias,Redondo menor,Tendinosa
+tendinopatias,Tríceps proximal,Tendinosa
+tendinopatias.1,Membros Superiores,Tendinosa
+tendinopatias.1,Cotovelo,Tendinosa
+tendinopatias.1,Bíceps distal,Tendinosa
+tendinopatias.1,Tríceps distal,Tendinosa
+tendinopatias.1,Epicondilite medial,Tendinosa
+tendinopatias.1,Epicondilite lateral,Tendinosa
+tendinopatias.2,Membros Superiores,Tendinosa
+tendinopatias.2,Punho,Tendinosa
+tendinopatias.2,Tendinite DeQuervain,Tendinosa
+tendinopatias.2,Extensor ulnar do carpo,Tendinosa
+tendinopatias.2,Flexor ulnar do carpo,Tendinosa
+tendinopatias.2,Entensores do punho e dedos,Tendinosa
+tendinopatias.2,Flexores do punho e dedos,Tendinosa
+tendinopatias.3,Bacia,Tendinosa
+tendinopatias.3,Bacia,Tendinosa
+tendinopatias.3,Reto abdominal,Tendinosa
+tendinopatias.3,Adutores,Tendinosa
+tendinopatias.3,Reto femoral,Tendinosa
+tendinopatias.3,Isquiotibiais,Tendinosa
+tendinopatias.4,Membros Inferiores,Tendinosa
+tendinopatias.4,Quadril,Tendinosa
+tendinopatias.4,Psoas,Tendinosa
+tendinopatias.4,Glúteo médio,Tendinosa
+tendinopatias.4,Trato iliotibial proximal,Tendinosa
+tendinopatias.4,Glúteo máximo,Tendinosa
+tendinopatias.5,Membros Inferiores,Tendinosa
+tendinopatias.5,Joelho,Tendinosa
+tendinopatias.5,Pata de ganso,Tendinosa
+tendinopatias.5,Quadríceps,Tendinosa
+tendinopatias.5,Patelar,Tendinosa
+tendinopatias.5,Trato iliotibial distal,Tendinosa
+tendinopatias.5,Bíceps femoral,Tendinosa
+tendinopatias.5,Isquiotibiais,Tendinosa
+tendinopatias.5,Gastrocnêmio proximal,Tendinosa
+tendinopatias.5,Extensores tornozelo-dedos,Tendinosa
+tendinopatias.6,Membros Inferiores,Tendinosa
+tendinopatias.6,Tornozelo,Tendinosa
+tendinopatias.6,Extensores tornozelo-dedos,Tendinosa
+tendinopatias.6,Fibulares,Tendinosa
+tendinopatias.6,Aquiles,Tendinosa
+tendinopatias.6,Tibial posterior,Tendinosa
+tendinopatias.7,Membros Inferiores,Tendinosa
+tendinopatias.7,Pé,Tendinosa
+tendinopatias.7,Fascíite plantar,Tendinosa
+tendinopatias.7,Fibular curto,Tendinosa
+alteração neurologica,Membros Superiores,Neurológica
+alteração neurologica,Plexo braquial,Neurológica
+alteração neurologica,Cervicobraquialgia,Neurológica
+alteração neurologica,Neuropraxia torácico longo,Neurológica
+alteração neurologica,Neuropraxia nervos do plexo braquial,Neurológica
+alteração neurologica,Síndrome do desfiladeiro torácico,Neurológica
+alteração neurologica,Síndrome do túnel radial,Neurológica
+alteração neurologica,Síndrome do túnel cubital,Neurológica
+alteração neurologica,Síndrome do túnel do carpo,Neurológica
+alteração neurologica,Síndrome do canal de Guyon,Neurológica
+alteração neurologica.1,Membros Inferiores,Neurológica
+alteração neurologica.1,Plexo lombossacro,Neurológica
+alteração neurologica.1,Lombociatalgia,Neurológica
+alteração neurologica.1,Compressão nervo cutâneo femoral lateral,Neurológica
+alteração neurologica.1,Compressão nervo fibular comum,Neurológica
+alteração neurologica.1,Síndrome do túnel do tarso anterior,Neurológica

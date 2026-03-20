@@ -9,6 +9,9 @@ from .views import (
     CidOAutocompleteView,
     EvolucaoMultidisciplinarViewSet,
     HistoricoCargaReferenciasView,
+    SaudeReferenciaLesaoHierarquiaView,
+    SaudeReferenciaLesaoListView,
+    SaudeReferenciaLesaoLookupView,
 )
 
 router = DefaultRouter()
@@ -23,6 +26,21 @@ urlpatterns = [
     ),
     path("cid10/autocomplete/", Cid10AutocompleteView.as_view(), name="cid10-autocomplete"),
     path("cido/autocomplete/", CidOAutocompleteView.as_view(), name="cido-autocomplete"),
+    path(
+        "referencia-lesao/",
+        SaudeReferenciaLesaoListView.as_view(),
+        name="referencia-lesao-list",
+    ),
+    path(
+        "referencia-lesao/lookup/",
+        SaudeReferenciaLesaoLookupView.as_view(),
+        name="referencia-lesao-lookup",
+    ),
+    path(
+        "referencia-lesao/hierarquia/",
+        SaudeReferenciaLesaoHierarquiaView.as_view(),
+        name="referencia-lesao-hierarquia",
+    ),
     path("carga-referencias/", CargaReferenciasSaudeView.as_view(), name="carga-referencias"),
     path(
         "carga-referencias/historico/",

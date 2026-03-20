@@ -8,7 +8,7 @@ from typing import Iterable
 
 from django.conf import settings
 
-from .models import Lateralidade, SacMapeamento, TipoLesao
+from .models import Lateralidade, SacMapeamento, SaudeReferenciaLesao, TipoLesao
 
 TIPO_ATENDIMENTO_OPTIONS = ["Inicial", "Retorno"]
 ENCAMINHAMENTOS_OPTIONS = [
@@ -394,4 +394,47 @@ def build_atividade_contexto_options(rows: Iterable[SacMapeamento] | None = None
         "tfm_taf_options": tfm_taf_options or list(DEFAULT_TFM_TAF_OPTIONS),
         "modalidade_esportiva_options": modalidade_options or list(DEFAULT_MODALIDADE_ESPORTIVA_OPTIONS),
         "conduta_terapeutica_options": conduta_options,
+    }
+
+
+def build_referencia_lesao_maps() -> dict[str, object]:
+    """Constrói mapas hierárquicos a partir de SaudeReferenciaLesao (modelo normalizado).
+
+    Retorna dicionário com:
+      - tipos_tecido: lista de tipos de tecido distintos
+      - regioes_por_tipo: {tipo_tecido: [regiao_geral, ...]}
+      - sub_regioes_por_tipo_regiao: {tipo_tecido: {regiao_geral: [sub_regiao, ...]}}
+      - itens_por_tipo_regiao_sub: {tipo_tecido: {regiao_geral: {sub_regiao: [item_especifico, ...]}}}
+    """
+    refs = SaudeReferenciaLesao.objects.order_by(
+        "tipo_tecido", "regiao_geral", "sub_regiao", "item_especifico"
+    )
+
+    tipos_set: set[str] = set()
+    regioes_map: dict[str, set[str]] = defaultdict(set)
+    sub_regioes_map: dict[str, dict[str, set[str]]] = defaultdict(lambda: defaultdict(set))
+    itens_map: dict[str, dict[str, dict[str, list[str]]]] = defaultdict(
+        lambda: defaultdict(lambda: defaultdict(list))
+    )
+
+    for ref in refs:
+        tipos_set.add(ref.tipo_tecido)
+        regioes_map[ref.tipo_tecido].add(ref.regiao_geral)
+        sub_regioes_map[ref.tipo_tecido][ref.regiao_geral].add(ref.sub_regiao)
+        itens_map[ref.tipo_tecido][ref.regiao_geral][ref.sub_regiao].append(ref.item_especifico)
+
+    return {
+        "tipos_tecido": sorted(tipos_set),
+        "regioes_por_tipo": {t: sorted(r) for t, r in regioes_map.items()},
+        "sub_regioes_por_tipo_regiao": {
+            t: {r: sorted(s) for r, s in regioes.items()}
+            for t, regioes in sub_regioes_map.items()
+        },
+        "itens_por_tipo_regiao_sub": {
+            t: {
+                r: {s: sorted(set(itens)) for s, itens in subs.items()}
+                for r, subs in regioes.items()
+            }
+            for t, regioes in itens_map.items()
+        },
     }

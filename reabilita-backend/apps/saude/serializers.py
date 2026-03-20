@@ -9,9 +9,17 @@ from .models import (
     EvolucaoMultidisciplinar,
     Lateralidade,
     OrigemLesao,
+    SaudeReferenciaLesao,
     TipoLesao,
 )
 from .references import build_sac_reference_maps, infer_lateralidade
+
+
+class SaudeReferenciaLesaoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SaudeReferenciaLesao
+        fields = ["id", "tipo_tecido", "regiao_geral", "sub_regiao", "item_especifico"]
+        read_only_fields = ["id"]
 
 
 class CargaReferenciasSerializer(serializers.Serializer):
