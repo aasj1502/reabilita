@@ -1,8 +1,8 @@
 export type TipoLesao = "Óssea" | "Articular" | "Muscular" | "Tendinosa" | "Neurológica";
 
-export type OrigemLesao = "Por Estresse" | "Traumática" | "Outra";
+export type OrigemLesao = "Por Estresse" | "Traumática" | "Outra" | "";
 
-export type DecisaoSred = "S-RED Positivo" | "S-RED Negativo";
+export type DecisaoSred = "Investigação Pendente" | "Em Investigação" | "S-RED Positivo" | "S-RED Negativo";
 
 export type Lateralidade = "Direita" | "Esquerda" | "Bilateral" | "Não é o caso";
 
@@ -38,6 +38,7 @@ export interface Atendimento {
 	data_registro: string;
 	cadete_id: number;
 	medico_id: number;
+	atendimento_origem_id: number | null;
 	tipo_atendimento: TipoAtendimento;
 	tipo_lesao: TipoLesao;
 	origem_lesao: OrigemLesao;
@@ -51,6 +52,7 @@ export interface Atendimento {
 	modalidade_esportiva: string;
 	conduta_terapeutica: string;
 	decisao_sred: DecisaoSred | '';
+	medicamentoso: boolean;
 	solicitar_exames_complementares: boolean;
 	exames_complementares: string[];
 	encaminhamentos_multidisciplinares: string[];
@@ -65,6 +67,7 @@ export interface Atendimento {
 export interface CreateAtendimentoPayload {
 	cadete_id: number;
 	medico_id: number;
+	atendimento_origem_id?: number | null;
 	tipo_atendimento: TipoAtendimento;
 	tipo_lesao: TipoLesao;
 	origem_lesao: OrigemLesao;
@@ -78,6 +81,7 @@ export interface CreateAtendimentoPayload {
 	modalidade_esportiva?: string;
 	conduta_terapeutica?: string;
 	decisao_sred?: DecisaoSred | '';
+	medicamentoso?: boolean;
 	solicitar_exames_complementares?: boolean;
 	exames_complementares?: string[];
 	encaminhamentos_multidisciplinares?: string[];
@@ -86,4 +90,29 @@ export interface CreateAtendimentoPayload {
 	cid10_secundarios?: string[];
 	codigo_cido?: string | null;
 	notas_clinicas?: string;
+}
+
+export interface CSVPreviewRow {
+	linha: number;
+	data: string;
+	atendimento: string;
+	lesao: string;
+	parte_corpo: string;
+	parte_lesionada: string;
+	origem: string;
+	erros: string[];
+}
+
+export interface CSVPreviewResponse {
+	total_linhas: number;
+	total_erros: number;
+	erros: string[];
+	preview: CSVPreviewRow[];
+	colunas_detectadas: string[];
+}
+
+export interface CSVImportResponse {
+	criados: number;
+	cadetes_novos: number;
+	avisos: string[];
 }

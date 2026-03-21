@@ -19,19 +19,32 @@ ENCAMINHAMENTOS_OPTIONS = [
 ]
 DISPOSICAO_OPTIONS = ["Dispensado", "Regime Limitado", "Alta", "Risco Cirúrgico", "VCL"]
 EXAMES_COMPLEMENTARES_OPTIONS = ["RX", "USG", "TC", "RM", "DEXA", "Sangue"]
-DECISAO_SRED_OPTIONS = ["S-RED Positivo", "S-RED Negativo"]
+DECISAO_SRED_OPTIONS = [
+    "Investigação Pendente",
+    "Em Investigação",
+    "S-RED Positivo",
+    "S-RED Negativo",
+]
+
+# Mapa de normalização: variantes encontradas em importações → valor canônico do TextChoices
+ORIGEM_LESAO_NORMALIZE: dict[str, str] = {
+    "por estresse": "Por Estresse",
+    "origem traumática": "Traumática",
+    "traumática": "Traumática",
+    "outra": "Outra",
+}
 
 DEFAULT_CLASSIFICACAO_ATIVIDADE_OPTIONS = [
     "Não informado",
-    "Evitável",
-    "Relacionado à Atividade",
+    "Prevenível",
+    "Decorrente da Atividade",
 ]
 DEFAULT_TIPO_ATIVIDADE_OPTIONS = ["Não informado"]
 DEFAULT_TFM_TAF_OPTIONS = ["Não informado"]
 DEFAULT_MODALIDADE_ESPORTIVA_OPTIONS = ["Não informado"]
 DEFAULT_CONDUTA_TERAPEUTICA_OPTIONS = [
     "Não definido",
-    "Cirurgico",
+    "Cirúrgico",
     "Conservador",
     "Pós-operatório",
     "Aguardando Exame",

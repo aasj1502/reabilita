@@ -5,11 +5,13 @@ from .models import (
     Atendimento,
     Cid10Categoria,
     CidOMorfologia,
+    DECISAO_SRED_TERMINAIS,
     DecisaoSred,
     EvolucaoMultidisciplinar,
     Lateralidade,
     OrigemLesao,
     SaudeReferenciaLesao,
+    TipoAtendimento,
     TipoLesao,
 )
 from .references import build_sac_reference_maps, infer_lateralidade
@@ -30,6 +32,13 @@ class CargaReferenciasSerializer(serializers.Serializer):
 class AtendimentoSerializer(serializers.ModelSerializer):
     cadete_id = serializers.PrimaryKeyRelatedField(source="cadete", queryset=Militar.objects.all())
     medico_id = serializers.PrimaryKeyRelatedField(source="medico", queryset=ProfissionalSaude.objects.all())
+    atendimento_origem_id = serializers.PrimaryKeyRelatedField(
+        source="atendimento_origem",
+        queryset=Atendimento.objects.all(),
+        required=False,
+        allow_null=True,
+        default=None,
+    )
 
     @staticmethod
     def _resolve_cid10(value: str) -> str:
@@ -136,7 +145,7 @@ class AtendimentoSerializer(serializers.ModelSerializer):
         elif self.instance is not None:
             decisao_sred = str(getattr(self.instance, "decisao_sred", "") or "").strip()
 
-        escolhas_decisao_sred = {DecisaoSred.POSITIVO, DecisaoSred.NEGATIVO}
+        escolhas_decisao_sred = {c.value for c in DecisaoSred}
         if decisao_sred and decisao_sred not in escolhas_decisao_sred:
             errors["decisao_sred"] = "Decisão S-RED inválida."
 
@@ -163,11 +172,24 @@ class AtendimentoSerializer(serializers.ModelSerializer):
         ) or codigo_cid10_resolvido.startswith("M84.3")
 
         if gatilho_sred and not decisao_sred:
-            errors["decisao_sred"] = "Informe a decisão S-RED (S-RED Positivo ou S-RED Negativo)."
+            errors["decisao_sred"] = "Informe a decisão S-RED."
         elif not gatilho_sred:
             attrs["decisao_sred"] = ""
         else:
             attrs["decisao_sred"] = decisao_sred
+
+        # Validação cadeia de retorno
+        tipo_atendimento = attrs.get("tipo_atendimento") or (
+            getattr(self.instance, "tipo_atendimento", "") if self.instance else ""
+        )
+        atendimento_origem = attrs.get("atendimento_origem")
+        if atendimento_origem is None and self.instance:
+            atendimento_origem = getattr(self.instance, "atendimento_origem", None)
+
+        if tipo_atendimento == TipoAtendimento.RETORNO and atendimento_origem is None:
+            errors["atendimento_origem"] = "Retornos devem referenciar o atendimento de origem."
+        if tipo_atendimento == TipoAtendimento.INICIAL and atendimento_origem is not None:
+            attrs["atendimento_origem"] = None
 
         tipo_atividade = str(
             attrs.get("tipo_atividade")
@@ -221,6 +243,33 @@ class AtendimentoSerializer(serializers.ModelSerializer):
 
         return attrs
 
+    @staticmethod
+    def _resolve_referencia_lesao(validated_data: dict) -> None:
+        """Busca (ou cria) a SaudeReferenciaLesao correspondente e vincula ao atendimento."""
+        tipo_lesao = (validated_data.get("tipo_lesao") or "").strip()
+        segmento = (validated_data.get("segmento_corporal") or "").strip()
+        estrutura = (validated_data.get("estrutura_anatomica") or "").strip()
+        localizacao = (validated_data.get("localizacao_lesao") or estrutura).strip()
+
+        if tipo_lesao and segmento and localizacao:
+            ref, _created = SaudeReferenciaLesao.objects.get_or_create(
+                tipo_tecido=tipo_lesao,
+                regiao_geral=segmento,
+                sub_regiao=estrutura,
+                item_especifico=localizacao,
+            )
+            validated_data["referencia_lesao"] = ref
+        else:
+            validated_data["referencia_lesao"] = None
+
+    def create(self, validated_data):
+        self._resolve_referencia_lesao(validated_data)
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        self._resolve_referencia_lesao(validated_data)
+        return super().update(instance, validated_data)
+
     class Meta:
         model = Atendimento
         fields = [
@@ -228,6 +277,7 @@ class AtendimentoSerializer(serializers.ModelSerializer):
             "data_registro",
             "cadete_id",
             "medico_id",
+            "atendimento_origem_id",
             "tipo_atendimento",
             "tipo_lesao",
             "origem_lesao",
@@ -235,12 +285,14 @@ class AtendimentoSerializer(serializers.ModelSerializer):
             "estrutura_anatomica",
             "localizacao_lesao",
             "lateralidade",
+            "referencia_lesao",
             "classificacao_atividade",
             "tipo_atividade",
             "tfm_taf",
             "modalidade_esportiva",
             "conduta_terapeutica",
             "decisao_sred",
+            "medicamentoso",
             "solicitar_exames_complementares",
             "exames_complementares",
             "encaminhamentos_multidisciplinares",
@@ -251,7 +303,7 @@ class AtendimentoSerializer(serializers.ModelSerializer):
             "notas_clinicas",
             "flag_sred",
         ]
-        read_only_fields = ["id", "data_registro", "flag_sred"]
+        read_only_fields = ["id", "data_registro", "flag_sred", "referencia_lesao"]
 
 
 class EvolucaoMultidisciplinarSerializer(serializers.ModelSerializer):

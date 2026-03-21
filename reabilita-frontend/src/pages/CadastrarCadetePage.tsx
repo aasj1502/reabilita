@@ -28,7 +28,6 @@ interface FormState {
 	turma: string;
 	ano: string;
 	posto_graduacao: string;
-	arma_quadro_servico: string;
 	curso: string;
 	companhia: string;
 	pelotao: string;
@@ -43,7 +42,6 @@ const initialFormState: FormState = {
 	turma: '',
 	ano: '',
 	posto_graduacao: '',
-	arma_quadro_servico: '',
 	curso: '',
 	companhia: '',
 	pelotao: '',
@@ -117,7 +115,6 @@ export const CadastrarCadetePage = () => {
 			turma: formData.turma.trim(),
 			ano: formData.ano,
 			posto_graduacao: formData.posto_graduacao,
-			arma_quadro_servico: formData.arma_quadro_servico.trim(),
 			curso: formData.curso,
 			companhia: formData.companhia.trim(),
 			pelotao: formData.pelotao.trim(),
@@ -260,13 +257,6 @@ export const CadastrarCadetePage = () => {
 								<MenuItem key={c} value={c}>{c}</MenuItem>
 							))}
 						</TextField>
-						<TextField
-							label="Arma/Quadro/Serviço"
-							value={formData.arma_quadro_servico}
-							onChange={(event) => handleChange('arma_quadro_servico', event.target.value)}
-							fullWidth
-							sx={{ '& .MuiInputBase-root': { minHeight: 44 } }}
-						/>
 					</Stack>
 
 					<Stack direction={{ xs: 'column', md: 'row' }} spacing={1.5}>

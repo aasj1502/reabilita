@@ -9,6 +9,8 @@ from .views import (
     CidOAutocompleteView,
     EvolucaoMultidisciplinarViewSet,
     HistoricoCargaReferenciasView,
+    ImportarCSVConfirmarView,
+    ImportarCSVPreviewView,
     SaudeReferenciaLesaoHierarquiaView,
     SaudeReferenciaLesaoListView,
     SaudeReferenciaLesaoLookupView,
@@ -47,5 +49,7 @@ urlpatterns = [
         HistoricoCargaReferenciasView.as_view(),
         name="historico-carga-referencias",
     ),
+    path("importar-csv/preview/", ImportarCSVPreviewView.as_view(), name="importar-csv-preview"),
+    path("importar-csv/confirmar/", ImportarCSVConfirmarView.as_view(), name="importar-csv-confirmar"),
     path("", include(router.urls)),
 ]

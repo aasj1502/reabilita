@@ -5,9 +5,11 @@ import { ClinicalLayout } from '../components/common/ClinicalLayout';
 import { AtendimentosPage } from '../pages/AtendimentosPage';
 import { CadetesPacientesPage } from '../pages/CadetesPacientesPage';
 import { CadastrarCadetePage } from '../pages/CadastrarCadetePage';
+import { CargaReferenciasPage } from '../pages/CargaReferenciasPage';
 import { DashboardPage } from '../pages/DashboardPage';
 import { EducadorFisicoPage } from '../pages/EducadorFisicoPage';
 import { FisioterapeutaPage } from '../pages/FisioterapeutaPage';
+import { ImportarCSVPage } from '../pages/ImportarCSVPage';
 import { LoginPage } from '../pages/LoginPage';
 import { MinhaContaPage } from '../pages/MinhaContaPage';
 import { NovoAtendimentoPage } from '../pages/NovoAtendimentoPage';
@@ -70,6 +72,8 @@ export const App = () => {
 					<Route path="/psicopedagogia" element={<PsicopedagogoPage />} />
 					<Route path="/minha-conta" element={<MinhaContaPage />} />
 					<Route path="/usuarios-perfis" element={<UsuariosPerfisPage />} />
+					<Route path="/importar-csv" element={<ImportarCSVPage />} />
+					<Route path="/carga-referencias" element={<CargaReferenciasPage />} />
 					<Route path="*" element={<Navigate to="/dashboard" replace />} />
 				</Route>
 			</Routes>

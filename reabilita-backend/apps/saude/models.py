@@ -175,8 +175,14 @@ class TipoAtendimento(models.TextChoices):
 
 
 class DecisaoSred(models.TextChoices):
+    INVESTIGACAO_PENDENTE = "Investigação Pendente", "Investigação Pendente"
+    EM_INVESTIGACAO = "Em Investigação", "Em Investigação"
     POSITIVO = "S-RED Positivo", "S-RED Positivo"
     NEGATIVO = "S-RED Negativo", "S-RED Negativo"
+
+
+# Estados terminais de S-RED (não podem ser reabertos)
+DECISAO_SRED_TERMINAIS = {DecisaoSred.POSITIVO, DecisaoSred.NEGATIVO}
 
 
 class Atendimento(models.Model):
@@ -187,23 +193,40 @@ class Atendimento(models.Model):
         on_delete=models.PROTECT,
         related_name="atendimentos_medicos",
     )
+    atendimento_origem = models.ForeignKey(
+        "self",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="retornos",
+        help_text="Atendimento inicial que originou este retorno.",
+    )
     tipo_atendimento = models.CharField(
         max_length=20,
         choices=TipoAtendimento.choices,
         default=TipoAtendimento.INICIAL,
     )
     tipo_lesao = models.CharField(max_length=20, choices=TipoLesao.choices)
-    origem_lesao = models.CharField(max_length=30, choices=OrigemLesao.choices)
+    origem_lesao = models.CharField(max_length=30, choices=OrigemLesao.choices, blank=True, default="")
     segmento_corporal = models.CharField(max_length=120, blank=True)
-    estrutura_anatomica = models.CharField(max_length=120)
+    estrutura_anatomica = models.CharField(max_length=120, blank=True)
     localizacao_lesao = models.CharField(max_length=255, blank=True)
     lateralidade = models.CharField(max_length=20, choices=Lateralidade.choices)
+    referencia_lesao = models.ForeignKey(
+        SaudeReferenciaLesao,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="atendimentos",
+        help_text="Referência normalizada da lesão (preenchida automaticamente ao salvar).",
+    )
     classificacao_atividade = models.CharField(max_length=120, blank=True)
     tipo_atividade = models.CharField(max_length=120, blank=True)
     tfm_taf = models.CharField(max_length=120, blank=True)
     modalidade_esportiva = models.CharField(max_length=120, blank=True)
     conduta_terapeutica = models.CharField(max_length=120, blank=True)
-    decisao_sred = models.CharField(max_length=20, choices=DecisaoSred.choices, blank=True, default="")
+    decisao_sred = models.CharField(max_length=30, choices=DecisaoSred.choices, blank=True, default="")
+    medicamentoso = models.BooleanField(default=False, help_text="Tratamento medicamentoso prescrito.")
     solicitar_exames_complementares = models.BooleanField(default=False)
     exames_complementares = models.JSONField(default=list, blank=True)
     encaminhamentos_multidisciplinares = models.JSONField(default=list, blank=True)
@@ -260,10 +283,16 @@ class Atendimento(models.Model):
         decisao = (self.decisao_sred or "").strip()
 
         if deve_ativar_sred and not decisao:
-            errors["decisao_sred"] = "Informe a decisão S-RED (S-RED Positivo ou S-RED Negativo)."
+            errors["decisao_sred"] = "Informe a decisão S-RED."
 
         if not deve_ativar_sred and decisao:
             self.decisao_sred = ""
+
+    def _validar_atendimento_origem(self, errors: dict[str, str]) -> None:
+        if self.tipo_atendimento == TipoAtendimento.RETORNO and not self.atendimento_origem_id:
+            errors["atendimento_origem"] = "Retornos devem referenciar o atendimento de origem."
+        if self.tipo_atendimento == TipoAtendimento.INICIAL and self.atendimento_origem_id:
+            errors["atendimento_origem"] = "Atendimento inicial não deve ter origem."
 
     def clean(self) -> None:
         errors = {}
@@ -274,6 +303,7 @@ class Atendimento(models.Model):
         self._validar_lateralidade(errors)
         self._validar_consistencia_oncologica(errors)
         self._validar_decisao_sred(errors)
+        self._validar_atendimento_origem(errors)
 
         if errors:
             raise ValidationError(errors)

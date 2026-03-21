@@ -12,6 +12,13 @@ class AnoCadete(models.TextChoices):
 
 class Militar(models.Model):
     nr_militar = models.CharField(max_length=30, unique=True)
+    matricula = models.CharField(
+        max_length=30,
+        blank=True,
+        default="",
+        db_index=True,
+        help_text="Matrícula ou identificador alternativo para rastreabilidade anônima.",
+    )
     nome_completo = models.CharField(max_length=255)
     nome_guerra = models.CharField(max_length=80, blank=True)
     sexo = models.CharField(max_length=30, blank=True)

@@ -10,6 +10,7 @@ import PsychologyOutlinedIcon from '@mui/icons-material/PsychologyOutlined';
 import RestaurantOutlinedIcon from '@mui/icons-material/RestaurantOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import SpaOutlinedIcon from '@mui/icons-material/SpaOutlined';
+import UploadFileOutlinedIcon from '@mui/icons-material/UploadFileOutlined';
 import WbSunnyOutlinedIcon from '@mui/icons-material/WbSunnyOutlined';
 import {
 	Box,
@@ -247,6 +248,20 @@ export const ClinicalLayout = () => {
 									<SettingsOutlinedIcon />
 								</ListItemIcon>
 								<ListItemText primary="Usuários e Perfis" />
+							</ListItemButton>
+						</ListItem>
+
+						<ListItem disablePadding>
+							<ListItemButton
+								component={RouterLink}
+								to="/importar-csv"
+								selected={isCurrentRoute(location.pathname, '/importar-csv')}
+								sx={{ minHeight: 44 }}
+							>
+								<ListItemIcon>
+									<UploadFileOutlinedIcon />
+								</ListItemIcon>
+								<ListItemText primary="Importar CSV" />
 							</ListItemButton>
 						</ListItem>
 

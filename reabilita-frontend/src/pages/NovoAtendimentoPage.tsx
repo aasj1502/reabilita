@@ -31,23 +31,27 @@ import type {
 type TipoAtendimentoForm = TipoAtendimento | '';
 type TipoLesaoForm = TipoLesao | '';
 type OrigemLesaoForm = OrigemLesao | '';
+type LateralidadeForm = Lateralidade | '';
 type DecisaoSredForm = DecisaoSred | '';
 
 interface FormState {
 	cadete_id: string;
 	medico_id: string;
+	atendimento_origem_id: string;
 	tipo_atendimento: TipoAtendimentoForm;
 	tipo_lesao: TipoLesaoForm;
 	origem_lesao: OrigemLesaoForm;
 	segmento_corporal: string;
 	estrutura_anatomica: string;
 	localizacao_lesao: string;
+	lateralidade: LateralidadeForm;
 	decisao_sred: DecisaoSredForm;
 	classificacao_atividade: string;
 	tipo_atividade: string;
 	tfm_taf: string;
 	modalidade_esportiva: string;
 	conduta_terapeutica: string;
+	medicamentoso: boolean;
 	solicitar_exames_complementares: boolean;
 	exames_complementares: string[];
 	encaminhamentos_multidisciplinares: string[];
@@ -70,18 +74,21 @@ const fallbackTipoLesaoOptions: TipoLesao[] = [
 const initialFormState: FormState = {
 	cadete_id: '',
 	medico_id: '',
+	atendimento_origem_id: '',
 	tipo_atendimento: 'Inicial',
 	tipo_lesao: '',
 	origem_lesao: 'Outra',
 	segmento_corporal: '',
 	estrutura_anatomica: '',
 	localizacao_lesao: '',
+	lateralidade: '',
 	decisao_sred: '',
 	classificacao_atividade: 'Não informado',
 	tipo_atividade: 'Não informado',
 	tfm_taf: 'Não informado',
 	modalidade_esportiva: 'Não informado',
 	conduta_terapeutica: 'Não definido',
+	medicamentoso: false,
 	solicitar_exames_complementares: false,
 	exames_complementares: [],
 	encaminhamentos_multidisciplinares: [],
@@ -459,7 +466,14 @@ export const NovoAtendimentoPage = () => {
 
 		if (!formData.tipo_lesao || !formData.segmento_corporal || !formData.estrutura_anatomica) {
 			const message =
-				'Preencha Tipo de Lesão, Segmento Corporal e Estrutura Lesionada para classificar o caso.';
+				'Preencha Tipo, Parte do Corpo e Parte Lesionada para classificar o caso.';
+			setSubmitError(message);
+			notify(message, 'error');
+			return;
+		}
+
+		if (!formData.lateralidade) {
+			const message = 'Informe a Lateralidade.';
 			setSubmitError(message);
 			notify(message, 'error');
 			return;
@@ -475,19 +489,21 @@ export const NovoAtendimentoPage = () => {
 		const payload: CreateAtendimentoPayload = {
 			cadete_id: Number(formData.cadete_id),
 			medico_id: Number(formData.medico_id),
+			atendimento_origem_id: formData.atendimento_origem_id ? Number(formData.atendimento_origem_id) : null,
 			tipo_atendimento: formData.tipo_atendimento,
 			tipo_lesao: formData.tipo_lesao,
 			origem_lesao: (formData.origem_lesao || 'Outra') as OrigemLesao,
 			segmento_corporal: formData.segmento_corporal.trim(),
 			estrutura_anatomica: formData.estrutura_anatomica.trim(),
 			localizacao_lesao: formData.localizacao_lesao.trim() || formData.estrutura_anatomica.trim(),
-			lateralidade: inferLateralidade(formData.segmento_corporal, formData.estrutura_anatomica),
+			lateralidade: formData.lateralidade as Lateralidade,
 			decisao_sred: exigeDecisaoSred ? formData.decisao_sred : '',
 			classificacao_atividade: formData.classificacao_atividade,
 			tipo_atividade: formData.tipo_atividade,
 			tfm_taf: formData.tfm_taf,
 			modalidade_esportiva: formData.modalidade_esportiva,
 			conduta_terapeutica: formData.conduta_terapeutica,
+			medicamentoso: formData.medicamentoso,
 			solicitar_exames_complementares: formData.solicitar_exames_complementares,
 			exames_complementares: formData.solicitar_exames_complementares
 				? formData.exames_complementares
@@ -599,6 +615,24 @@ export const NovoAtendimentoPage = () => {
 							</TextField>
 						</Stack>
 
+						{formData.tipo_atendimento === 'Retorno' && (
+							<TextField
+								label="ID do Atendimento de Origem"
+								type="number"
+								value={formData.atendimento_origem_id}
+								onChange={(event) =>
+									setFormData((current) => ({
+										...current,
+										atendimento_origem_id: event.target.value,
+									}))
+								}
+								required
+								fullWidth
+								helperText="Informe o ID do atendimento inicial que originou este retorno."
+								sx={{ '& .MuiInputBase-root': { minHeight: 44 } }}
+							/>
+						)}
+
 						<Stack direction={{ xs: 'column', md: 'row' }} spacing={1.5}>
 							<TextField
 								label="Data"
@@ -625,7 +659,7 @@ export const NovoAtendimentoPage = () => {
 						<Stack direction={{ xs: 'column', md: 'row' }} spacing={1.5}>
 							<TextField
 								select
-								label="Tipo de Lesão"
+								label="Tipo"
 								value={formData.tipo_lesao}
 								onChange={(event) =>
 									setFormData((current) => ({
@@ -634,6 +668,7 @@ export const NovoAtendimentoPage = () => {
 										segmento_corporal: '',
 										estrutura_anatomica: '',
 										localizacao_lesao: '',
+										lateralidade: '',
 									}))
 								}
 								required
@@ -670,7 +705,7 @@ export const NovoAtendimentoPage = () => {
 
 							<TextField
 								select
-								label="Segmento Corporal"
+								label="Parte do Corpo"
 								value={formData.segmento_corporal}
 								onChange={(event) =>
 									setFormData((current) => ({
@@ -678,6 +713,7 @@ export const NovoAtendimentoPage = () => {
 										segmento_corporal: event.target.value,
 										estrutura_anatomica: '',
 										localizacao_lesao: '',
+										lateralidade: '',
 									}))
 								}
 								required
@@ -693,31 +729,56 @@ export const NovoAtendimentoPage = () => {
 							</TextField>
 						</Stack>
 
-						<TextField
-							select
-							label="Estrutura Lesionada"
-							value={formData.estrutura_anatomica}
-							onChange={(event) =>
-								setFormData((current) => ({
-									...current,
-									estrutura_anatomica: event.target.value,
-									localizacao_lesao: current.localizacao_lesao || event.target.value,
-								}))
-							}
-							required
-							disabled={!formData.segmento_corporal}
-							fullWidth
-							sx={{ '& .MuiInputBase-root': { minHeight: 44 } }}
-						>
-							{estruturaOptions.map((item) => (
-								<MenuItem key={item} value={item}>
-									{item}
-								</MenuItem>
-							))}
-						</TextField>
+						<Stack direction={{ xs: 'column', md: 'row' }} spacing={1.5}>
+							<TextField
+								select
+								label="Parte Lesionada"
+								value={formData.estrutura_anatomica}
+								onChange={(event) => {
+									const estrutura = event.target.value;
+									const lateralidadeInferida = inferLateralidade(formData.segmento_corporal, estrutura);
+									setFormData((current) => ({
+										...current,
+										estrutura_anatomica: estrutura,
+										localizacao_lesao: current.localizacao_lesao || estrutura,
+										lateralidade: lateralidadeInferida,
+									}));
+								}}
+								required
+								disabled={!formData.segmento_corporal}
+								fullWidth
+								sx={{ '& .MuiInputBase-root': { minHeight: 44 } }}
+							>
+								{estruturaOptions.map((item) => (
+									<MenuItem key={item} value={item}>
+										{item}
+									</MenuItem>
+								))}
+							</TextField>
+
+							<TextField
+								select
+								label="Lateralidade"
+								value={formData.lateralidade}
+								onChange={(event) =>
+									setFormData((current) => ({
+										...current,
+										lateralidade: event.target.value as LateralidadeForm,
+									}))
+								}
+								required
+								fullWidth
+								sx={{ '& .MuiInputBase-root': { minHeight: 44 } }}
+							>
+								<MenuItem value="Bilateral">Bilateral</MenuItem>
+								<MenuItem value="Direita">Direita</MenuItem>
+								<MenuItem value="Esquerda">Esquerda</MenuItem>
+								<MenuItem value="Não é o caso">N/A</MenuItem>
+							</TextField>
+						</Stack>
 
 						<TextField
-							label="Localização / Sítio da Lesão"
+							label="Local da Lesão"
 							value={formData.localizacao_lesao}
 							onChange={(event) =>
 								setFormData((current) => ({ ...current, localizacao_lesao: event.target.value }))
@@ -880,6 +941,22 @@ export const NovoAtendimentoPage = () => {
 								))}
 							</TextField>
 						</Stack>
+
+						<FormControlLabel
+							control={
+								<Checkbox
+									checked={formData.medicamentoso}
+									onChange={(event) =>
+										setFormData((current) => ({
+											...current,
+											medicamentoso: event.target.checked,
+										}))
+									}
+								/>
+							}
+							label="Tratamento Medicamentoso"
+							sx={{ '& .MuiFormControlLabel-label': { fontSize: '0.875rem' } }}
+						/>
 					</Stack>
 				</SectionCard>
 

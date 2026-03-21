@@ -54,8 +54,8 @@ export const AtendimentoList = ({
 								Data
 							</TableSortLabel>
 						</TableCell>
-						<TableCell>Tipo de Lesão</TableCell>
-						<TableCell>Estrutura</TableCell>
+						<TableCell>Tipo</TableCell>
+						<TableCell>Parte Lesionada</TableCell>
 						<TableCell>Lateralidade</TableCell>
 						<TableCell>CID-10</TableCell>
 						<TableCell>S-RED</TableCell>
