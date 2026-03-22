@@ -54,6 +54,11 @@ if [ -n "${DJANGO_SUPERUSER_PASSWORD:-}" ]; then
   python manage.py seed_admin
 fi
 
+if [ "${RUN_SEED_DEV_USERS:-false}" = "true" ]; then
+  echo "[backend] Criando/atualizando usuários padrão de desenvolvimento..."
+  python manage.py seed_dev_users
+fi
+
 if [ "${RUN_SEED_REFERENCIAS:-false}" = "true" ]; then
   echo "[backend] Executando carga de referências clínicas..."
   python manage.py seed_referencias_saude
